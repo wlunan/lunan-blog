@@ -22,11 +22,11 @@ Firefly 支持在 Markdown、MDX 文章中使用 Obsidian 风格的 Wiki Link �
 [[markdown-extended]]
 ```
 
-[[firefly]]
+[[../firefly]]
 
 [[guide/index]]
 
-[[markdown-extended]]
+[[../markdown-extended]]
 
 ## 行内链接
 
@@ -36,7 +36,7 @@ Firefly 支持在 Markdown、MDX 文章中使用 Obsidian 风格的 Wiki Link �
 请参阅 [[firefly]] 了解主题特性。
 ```
 
-请参阅 [[firefly]] 了解主题特性。
+请参阅 [[../firefly]] 了解主题特性。
 
 ## 自定义显示标题
 
@@ -48,9 +48,9 @@ Firefly 支持在 Markdown、MDX 文章中使用 Obsidian 风格的 Wiki Link �
 [[firefly|Firefly 主题介绍]]
 ```
 
-请参阅 [[firefly|主题介绍]] 了解主题特性。
+请参阅 [[../firefly|主题介绍]] 了解主题特性。
 
-[[firefly|Firefly 主题介绍]]
+[[../firefly|Firefly 主题介绍]]
 
 一个例外：如果 `|` 后的文字只是把链接目标又抄了一遍（`[[guide/index|index]]`），会被当作无效别名忽略，仍然显示文章标题。Obsidian 在插入的链接时会自动补上这样的别名，避免笔记里显示一长串路径，这个例外就是为它准备的。
 
@@ -102,7 +102,7 @@ Firefly 支持在 Markdown、MDX 文章中使用 Obsidian 风格的 Wiki Link �
 
 在文章 slug 后添加 `#标题`。带标题锚点的链接始终渲染为普通链接：
 
-[[code-examples#语法高亮|查看代码块语法高亮]]
+[[../code-examples#语法高亮|查看代码块语法高亮]]
 
 [[guide/firefly-layout-system#相关链接|firefly-layout-system]]
 
