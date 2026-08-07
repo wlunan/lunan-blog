@@ -8,8 +8,8 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	// 是否在侧边栏显示音乐播放器组件
 	showInSidebar: true,
 
-	// 使用方式："meting" 使用 Meting API，"local" 使用本地音乐列表
-	mode: "meting",
+	// 使用方式："meting" 使用 Meting API，"gdstudio" 使用 GD Studio API，"local" 使用本地音乐列表
+	mode: "gdstudio",
 
 	// 默认音量 (0-1)
 	volume: 0.7,
@@ -38,6 +38,17 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 			"https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
 			"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
 		],
+	},
+
+	// GD Studio API 配置（当 mode 为 "gdstudio" 时使用）
+	// 歌单信息复用 meting 的 server、type、id 配置
+	gdstudio: {
+		// 音乐源：netease（默认）、tencent、kuwo、joox、bilibili
+		source: "netease",
+		// 音质：128/192/320/740(16bit无损)/999(24bit无损)
+		br: 128,
+		// 专辑图尺寸：300（小图）或 500（大图）
+		picSize: 300,
 	},
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）

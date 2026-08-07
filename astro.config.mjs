@@ -337,6 +337,24 @@ export default defineConfig({
 			watch: {
 				ignored: ["**/package/**", "**/Firefly-docs/**"],
 			},
+			proxy: {
+				// Meting API 代理，解决浏览器 CORS 问题
+				"/api/meting/": {
+					target: "https://api.i-meto.com",
+					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/api\/meting/, "/meting/api"),
+				},
+				"/api/meting-fb1/": {
+					target: "https://api.injahow.cn",
+					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/api\/meting-fb1/, "/meting"),
+				},
+				"/api/meting-fb2/": {
+					target: "https://api.moeyao.cn",
+					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/api\/meting-fb2/, "/meting"),
+				},
+			},
 		},
 		resolve: {
 			alias: {

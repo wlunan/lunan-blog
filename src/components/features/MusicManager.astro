@@ -31,6 +31,7 @@ const localPlaylist =
 const managerConfigStr = JSON.stringify({
 	mode: config.mode,
 	meting: config.meting,
+	gdstudio: config.gdstudio,
 	localPlaylist: localPlaylist,
 	volume: config.volume ?? 0.7,
 	playMode: config.playMode ?? "list",
@@ -170,10 +171,191 @@ const managerConfigStr = JSON.stringify({
         throw new Error('All Meting APIs failed');
     }
 
+    // ── GD Studio fetch (lazy: get playlist from Meting, fetch URL on-demand) ──
+    // 初始化时只从 Meting 获取歌单列表（歌名+歌手+封面），不获取音频 URL
+    // 播放时才用 GD Studio 按需搜索获取完整音质 URL，避免一次性请求过多
+    // Meting API 在开发环境通过 Vite proxy 代理（/api/meting），生产环境直接用原地址
+    var gdUrlCache = {}; // cache: { trackIndex: { url, pic, _lyricId, _trackId } }
+    var metingProxyBase = (typeof window !== 'undefined' && window.location.hostname === 'localhost')
+        ? '/api/meting/'  // 开发环境走 Vite 代理
+        : 'https://api.i-meto.com/meting/api';  // 生产环境直连
+
+    async function fetchGDStudioData() {
+        if (!config.gdstudio || !config.meting) return;
+        var m = config.meting;
+        var metingApis = [metingProxyBase].concat((m.fallbackApis || []).map(function (api) {
+            // fallback 也尝试走本地代理
+            if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+                return api.replace('https://api.injahow.cn/meting', '/api/meting-fb1/')
+                          .replace('https://api.moeyao.cn/meting', '/api/meting-fb2/');
+            }
+            return api;
+        }));
+        var playlistMeta = null;
+
+        for (var i = 0; i < metingApis.length; i++) {
+            var baseApi = metingApis[i];
+            if (!baseApi) continue;
+            try {
+                var metingUrl = baseApi;
+                // 只有完整 URL 才需要替换参数
+                if (baseApi.indexOf('http') === 0) {
+                    metingUrl = baseApi
+                        .replace(':server', m.server)
+                        .replace(':type', m.type)
+                        .replace(':id', m.id)
+                        .replace(':r', Math.random());
+                    if (m.auth) metingUrl += '&auth=' + m.auth;
+                } else {
+                    // 本地代理路径
+                    metingUrl = baseApi + '?server=' + m.server + '&type=' + m.type + '&id=' + m.id + '&r=' + Math.random();
+                    if (m.auth) metingUrl += '&auth=' + m.auth;
+                }
+
+                var metingRes = await fetch(metingUrl);
+                if (!metingRes.ok) continue;
+                var metingData = await metingRes.json();
+
+                if (Array.isArray(metingData) && metingData.length > 0) {
+                    playlistMeta = metingData.map(function (item) {
+                        return {
+                            name: item.title || item.name || 'Unknown',
+                            artist: item.author || item.artist || 'Unknown',
+                            url: '',  // 延迟加载，播放时才获取
+                            pic: item.pic || item.cover || '',
+                            lrc: item.lrc || ''
+                        };
+                    });
+                    break;
+                }
+            } catch (e) {
+                console.warn('GD Studio: Meting API failed for ' + baseApi, e);
+            }
+        }
+
+        if (!playlistMeta || playlistMeta.length === 0) {
+            throw new Error('GD Studio: failed to get playlist from Meting API');
+        }
+
+        state.playlist = playlistMeta;
+    }
+
+    // 为指定歌曲获取 GD Studio 完整 URL（按需懒加载，带缓存）
+    async function fetchGDStudioUrl(trackIndex) {
+        if (!config.gdstudio) return null;
+        var gs = config.gdstudio;
+        var source = gs.source || 'netease';
+        var br = gs.br || 320;
+        var picSize = gs.picSize || 500;
+
+        // 缓存命中
+        if (gdUrlCache[trackIndex]) return gdUrlCache[trackIndex];
+
+        var track = state.playlist[trackIndex];
+        if (!track) return null;
+
+        var searchKeyword = track.name + ' ' + track.artist;
+        var searchUrl = 'https://music-api.gdstudio.xyz/api.php?types=search'
+            + '&source=' + source
+            + '&name=' + encodeURIComponent(searchKeyword)
+            + '&count=3'
+            + '&pages=1';
+
+        try {
+            var searchRes = await fetch(searchUrl);
+            if (!searchRes.ok) return null;
+            var searchData = await searchRes.json();
+            if (!Array.isArray(searchData) || searchData.length === 0) return null;
+
+            // 最佳匹配
+            var bestMatch = searchData[0];
+            var targetName = track.name.toLowerCase();
+            var targetArtist = track.artist.toLowerCase();
+            for (var j = 0; j < searchData.length; j++) {
+                var result = searchData[j];
+                var rn = (result.name || '').toLowerCase();
+                var ra = Array.isArray(result.artist)
+                    ? result.artist.join(' ').toLowerCase()
+                    : (result.artist || '').toLowerCase();
+                if (rn.indexOf(targetName) !== -1 || targetName.indexOf(rn) !== -1) {
+                    bestMatch = result;
+                    if (ra.indexOf(targetArtist) !== -1 || targetArtist.indexOf(ra) !== -1) {
+                        break;
+                    }
+                }
+            }
+
+            var trackId = bestMatch.id;
+            var picId = bestMatch.pic_id;
+            var lyricId = bestMatch.lyric_id;
+
+            var urlApi = 'https://music-api.gdstudio.xyz/api.php?types=url'
+                + '&source=' + source
+                + '&id=' + trackId
+                + '&br=' + br;
+
+            var picUrl = picId
+                ? 'https://music-api.gdstudio.xyz/api.php?types=pic'
+                    + '&source=' + source
+                    + '&id=' + picId
+                    + '&size=' + picSize
+                : '';
+
+            var [urlRes, picRes] = await Promise.all([
+                fetch(urlApi).catch(function () { return null; }),
+                picUrl ? fetch(picUrl).catch(function () { return null; }) : Promise.resolve(null)
+            ]);
+
+            var urlData = urlRes && urlRes.ok ? await urlRes.json() : null;
+            var picData = picRes && picRes.ok ? await picRes.json() : null;
+
+            var result = {
+                url: (urlData && urlData.url) || '',
+                pic: (picData && picData.url) || track.pic || '',
+                _lyricId: lyricId,
+                _source: source,
+                _trackId: trackId
+            };
+
+            if (result.url) {
+                gdUrlCache[trackIndex] = result;
+            }
+            return result;
+        } catch (e) {
+            console.warn('GD Studio: fetch URL failed for "' + track.name + '"', e);
+            return null;
+        }
+    }
+
     // ── Lyrics ───────────────────────────────────────────────
     function loadLyrics(track) {
         state.lyrics = [];
         state.currentLrcIndex = -1;
+
+        // GD Studio: fetch lyrics on demand using lyric_id
+        if (config.mode === 'gdstudio' && track._lyricId && track._source) {
+            emit('fm:lyrics', { lyrics: [], status: 'loading' });
+            var lyricUrl = 'https://music-api.gdstudio.xyz/api.php?types=lyric'
+                + '&source=' + track._source
+                + '&id=' + track._lyricId;
+            fetch(lyricUrl)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    // Prefer tlyric (translated), fallback to lyric (original)
+                    var lrcText = (data && data.tlyric) || (data && data.lyric) || '';
+                    if (lrcText) {
+                        state.lyrics = parseLRC(lrcText);
+                        emit('fm:lyrics', { lyrics: state.lyrics, status: state.lyrics.length > 0 ? 'loaded' : 'none' });
+                    } else {
+                        emit('fm:lyrics', { lyrics: [], status: 'none' });
+                    }
+                })
+                .catch(function () {
+                    state.lyrics = [];
+                    emit('fm:lyrics', { lyrics: [], status: 'failed' });
+                });
+            return;
+        }
 
         if (!track.lrc) {
             emit('fm:lyrics', { lyrics: [], status: 'none' });
@@ -240,21 +422,69 @@ const managerConfigStr = JSON.stringify({
             errorSkipTimeout = null;
         }
 
+        // GD Studio 模式：按需获取完整 URL
+        if (config.mode === 'gdstudio' && config.gdstudio) {
+            // 如果当前 track 已有 URL（已缓存），直接播放
+            if (track.url && track._trackId) {
+                currentTrackUrls = [track.url];
+                currentTrackUrlIndex = 0;
+                loadLyrics(track);
+                emit('fm:track', { index: index, track: track, autoPlay: !!autoPlay });
+                tryPlayCurrentTrackUrl(autoPlay, ver);
+                return;
+            }
+
+            // 异步获取 URL
+            fetchGDStudioUrl(index).then(function (result) {
+                if (ver !== loadVersion) return; // stale
+                if (result && result.url) {
+                    // 更新 track 数据
+                    track.url = result.url;
+                    if (result.pic) track.pic = result.pic;
+                    if (result._lyricId) track._lyricId = result._lyricId;
+                    if (result._trackId) track._trackId = result._trackId;
+                    if (result._source) track._source = result._source;
+
+                    currentTrackUrls = [track.url];
+                    currentTrackUrlIndex = 0;
+                    loadLyrics(track);
+                    emit('fm:track', { index: index, track: track, autoPlay: !!autoPlay });
+                    tryPlayCurrentTrackUrl(autoPlay, ver);
+                } else {
+                    // GD Studio 获取失败，用 Meting 原始 URL 兜底
+                    if (track.lrc) {
+                        // Meting 返回的 lrc 可能包含 URL，尝试从中提取
+                        // 如果也没有，直接报错跳过
+                    }
+                    state.error = 'No playable URL';
+                    emit('fm:error', { message: '获取播放地址失败，即将跳过...' });
+                    if (errorSkipTimeout) clearTimeout(errorSkipTimeout);
+                    errorSkipTimeout = setTimeout(function () {
+                        if (ver === loadVersion) playNext(true);
+                    }, 2000);
+                }
+            });
+            return;
+        }
+
         currentTrackUrls = [track.url];
         currentTrackUrlIndex = 0;
 
-        var matchId = track.url.match(/[?&]id=([^&]+)/);
-        var matchServer = track.url.match(/[?&]server=([^&]+)/);
-        if (matchId && matchServer && config.meting && config.meting.fallbackApis) {
-            config.meting.fallbackApis.forEach(function (fallback) {
-                var fallbackUrl = fallback
-                    .replace(':server', matchServer[1])
-                    .replace(':type', 'url')
-                    .replace(':id', matchId[1]);
-                if (currentTrackUrls.indexOf(fallbackUrl) === -1) {
-                    currentTrackUrls.push(fallbackUrl);
-                }
-            });
+        // Meting fallback URLs (only for meting mode)
+        if (config.mode === 'meting') {
+            var matchId = track.url.match(/[?&]id=([^&]+)/);
+            var matchServer = track.url.match(/[?&]server=([^&]+)/);
+            if (matchId && matchServer && config.meting && config.meting.fallbackApis) {
+                config.meting.fallbackApis.forEach(function (fallback) {
+                    var fallbackUrl = fallback
+                        .replace(':server', matchServer[1])
+                        .replace(':type', 'url')
+                        .replace(':id', matchId[1]);
+                    if (currentTrackUrls.indexOf(fallbackUrl) === -1) {
+                        currentTrackUrls.push(fallbackUrl);
+                    }
+                });
+            }
         }
 
         loadLyrics(track);
@@ -409,6 +639,8 @@ const managerConfigStr = JSON.stringify({
         try {
             if (config.mode === 'meting' && config.meting) {
                 await fetchMetingData();
+            } else if (config.mode === 'gdstudio' && config.gdstudio) {
+                await fetchGDStudioData();
             } else if (config.mode === 'local') {
                 state.playlist = config.localPlaylist || [];
             }

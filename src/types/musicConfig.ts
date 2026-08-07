@@ -1,7 +1,7 @@
 // 音乐播放器配置
 export type MusicPlayerConfig = {
-	// 使用方式：'meting' 或 'local'
-	mode?: "meting" | "local"; // "meting" 使用 Meting API，"local" 使用本地音乐列表
+	// 使用方式：'meting'、'gdstudio' 或 'local'
+	mode?: "meting" | "gdstudio" | "local";
 
 	// 默认音量 (0-1)
 	volume?: number;
@@ -37,6 +37,19 @@ export type MusicPlayerConfig = {
 
 		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis?: string[];
+	};
+
+	// GD Studio API 配置（当 mode 为 'gdstudio' 时使用）
+	// 歌单信息从 meting 配置中读取（server、type、id），GD Studio 负责获取完整音质 URL
+	gdstudio?: {
+		// 音乐源：netease（默认）、tencent、kuwo、joox、bilibili
+		source?: "netease" | "tencent" | "kuwo" | "joox" | "bilibili";
+
+		// 音质：128/192/320/740/999，默认 320
+		br?: 128 | 192 | 320 | 740 | 999;
+
+		// 专辑图尺寸：300（小图）或 500（大图），默认 500
+		picSize?: 300 | 500;
 	};
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）
