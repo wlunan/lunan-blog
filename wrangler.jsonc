@@ -1,5 +1,5 @@
 {
-	"name": "firefly",
+	"name": "lunan-docs-firefly",
 	"compatibility_date": "202-08-07",
 	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
