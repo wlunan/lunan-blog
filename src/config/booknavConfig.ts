@@ -129,6 +129,12 @@ export const booknavConfig: BooknavGroup[] = [
 				desc: "把代码片段生成漂亮的图片",
 				weight: 8,
 			},
+			{
+				title: "Music",
+				url: "https://music.gdstudio.xyz/",
+				desc: "在线音乐",
+				weight: 8,
+			}
 		],
 	},
 	{

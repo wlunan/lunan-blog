@@ -1,5 +1,5 @@
 ---
-title: Markdown 扩展功能
+title: markdown-extended
 published: 1970-01-01
 updated: 1970-01-01
 description: "了解 Firefly 中的 Markdown 功能"
@@ -7,6 +7,8 @@ image: ""
 tags: [演示, 示例, Markdown, Firefly]
 category: "文章示例"
 slug: markdown-extended
+date: 2026-08-07T15:02:42+08:00
+lastmod: 2026-08-07T17:14:52+08:00
 ---
 
 ## GitHub 仓库卡片
@@ -276,6 +278,5 @@ export const siteConfig: SiteConfig = {
 ![示例图片二](./images/firefly3.avif)
 [/grid]
 ```
-
 
 ---

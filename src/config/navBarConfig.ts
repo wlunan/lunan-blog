@@ -60,10 +60,10 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 			LinkPresets.Gallery,
 
 			// 追番
-			LinkPresets.Anime,
+			// LinkPresets.Anime,
 
 			// 番组计划
-			LinkPresets.Bangumi,
+			// LinkPresets.Bangumi,
 
 			// 书签导航
 			LinkPresets.Booknav,
@@ -98,10 +98,10 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				icon: "fa7-brands:github",
 			},
 			{
-				name: "Gitee",
-				url: "https://gitee.com/CuteLeaf/Firefly",
+				name: "炫猿导航页",
+				url: "https://xydh.fun/lunan",
 				external: true,
-				icon: "fa7-brands:gitee",
+				icon: "material-symbols:bookmarks",
 			},
 			{
 				name: "QQ交流群",

@@ -1,14 +1,18 @@
 ---
-title: Firefly 简单使用指南
+title: index
 published: 1970-01-02
-pinned: true
-description: "如何使用 Firefly 博客模板。"
-image: "./cover.avif"
-tags: ["Firefly", "博客", "Markdown", "指南"]
+pinned: false
+description: 如何使用 Firefly 博客模板。
+image: ./cover.avif
+tags:
+  - Firefly
+  - 博客
+  - Markdown
+  - 指南
 category: 博客指南
+date: 2026-08-07T15:02:42+08:00
+lastmod: 2026-08-07T17:22:30+08:00
 ---
-
-
 
 这个博客模板是基于 [Astro](https://astro.build/) 构建的。对于本指南中未提及的内容，您可以在 [Astro 文档](https://docs.astro.build/) 中找到答案。
 
@@ -25,9 +29,6 @@ category: 前端开发
 draft: false
 ---
 ```
-
-
-
 
 | 属性          | 描述                                                                                                                                                                                                 |
 |---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

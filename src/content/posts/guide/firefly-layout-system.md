@@ -1,11 +1,13 @@
 ---
-title: Firefly 布局系统详解
+title: firefly-layout-system
 published: 1970-01-03
 description: 深入了解 Firefly 的布局系统，包括侧边栏布局（左侧/双侧）和文章列表布局（列表/网格），以及自适应网格列数。
 image: ../images/firefly1.avif
 tags: [Firefly, 布局, 博客, 指南]
 category: 博客指南
 slug: guide/firefly-layout-system
+date: 2026-08-07T15:02:42+08:00
+lastmod: 2026-08-07T17:14:48+08:00
 ---
 
 ## 📖 概述
@@ -27,7 +29,6 @@ Firefly 提供了灵活的布局系统，允许您根据内容需求和个人喜
 ![双侧边栏+网格布局](../images/both-grid.avif)
 ![双侧边栏+网格瀑布流布局](../images/masonry.avif)
 [/grid]
-
 
 ## 一、侧边栏布局系统
 
@@ -64,7 +65,6 @@ Firefly 提供了灵活的布局系统，允许您根据内容需求和个人喜
 适用在只想用单侧栏，但在文章详情页想用对侧栏的目录等组件的场景
 :::
 
-
 #### 配置示例
 
 ```typescript
@@ -99,7 +99,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 - 信息密集型博客
 - 需要展示大量辅助内容
 - 专业性强的技术博客
-
 
 #### 配置示例
 

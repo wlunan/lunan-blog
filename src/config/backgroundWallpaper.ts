@@ -37,24 +37,23 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 	 */
 	src: {
 		// 桌面背景图片（支持单张或多张随机）
-		// desktop: "assets/images/DesktopWallpaper/d1.avif",
+		// desktop: "assets/images/DesktopWallpaper/1500 x 1171zyep6v.webp",
 		desktop: [
-			"assets/images/DesktopWallpaper/d1.avif",
-			"assets/images/DesktopWallpaper/d2.avif",
-			"assets/images/DesktopWallpaper/d3.avif",
-			"assets/images/DesktopWallpaper/d4.avif",
-			"assets/images/DesktopWallpaper/d5.avif",
-			"assets/images/DesktopWallpaper/d6.avif",
+			"assets/images/DesktopWallpaper/1500 x 1171zyep6v.webp",
+			"assets/images/DesktopWallpaper/2500 x 1406gw9ol3-2.webp",
+			"assets/images/DesktopWallpaper/2880 x 1620gp6gp7.webp",
+			"assets/images/DesktopWallpaper/3840 x 21603q9qky.webp",
+			"assets/images/DesktopWallpaper/4046 x 2276jxjr85-3.webp",
+			"assets/images/DesktopWallpaper/4276 x 1966xe85j3-1.webp",
 		],
 		// 移动背景图片（支持单张或多张随机）
-		// mobile: "assets/images/MobileWallpaper/m1.avif",
+		// mobile: "assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
 		mobile: [
-			"assets/images/MobileWallpaper/m1.avif",
-			"assets/images/MobileWallpaper/m2.avif",
-			"assets/images/MobileWallpaper/m3.avif",
-			"assets/images/MobileWallpaper/m4.avif",
-			"assets/images/MobileWallpaper/m5.avif",
-			"assets/images/MobileWallpaper/m6.avif",
+			"assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
+			"assets/images/MobileWallpaper/1179 x 176683p5d2.webp",
+			"assets/images/MobileWallpaper/1179 x 1766mdr3wk.webp",
+			"assets/images/MobileWallpaper/1190 x 1683ex5m8w.webp",
+			"assets/images/MobileWallpaper/1276 x 17113q96l6.webp",
 		],
 		// 背景视频播放地址
 		// 支持单个视频路径（字符串）或多个视频循环（数组，参考上面壁纸配置）
