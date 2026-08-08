@@ -1,0 +1,27 @@
+{
+  "_comment": "发布清单：列出要从 obs-notes 复制到 posts/ 的笔记。格式：{ 'source': '相对路径', 'note': '备注' }",
+  "_usage": "每次想发布新笔记时，在这个数组中新增一条，然后运行 node copy-to-posts.mjs",
+  "maxFileSizeGB": 0.05,
+  "posts": [
+    {
+      "source": "02领域-Areas/内容创作/几千年前，人类就在写Prompt了.md",
+      "note": "AI+语言学 科普文，视角独特，文笔成熟"
+    },
+    {
+      "source": "02领域-Areas/02小南思考/从自行车轮胎和充电宝的保养想到的人生启示.md",
+      "note": "生活感悟类，已有公众号排版版本"
+    },
+    {
+      "source": "02领域-Areas/内容创作/AI时代，我们该如何记笔记？.md",
+      "note": "已在知乎发布，知识管理话题"
+    },
+    {
+      "source": "02领域-Areas/内容创作/科技巨头的\u201c个人神话\u201d与团队真相.md",
+      "note": "长文，科技+管理话题"
+    },
+    {
+      "source": "02领域-Areas/内容创作/润色发布-从\u201czhongguo\u201d到\u201cvsgo\u201d\uff0c我的打字方式进化史.md",
+      "note": "个人经历+工具推荐，有润色版"
+    }
+  ]
+}
