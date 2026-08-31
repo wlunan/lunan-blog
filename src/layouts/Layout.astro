@@ -15,6 +15,7 @@ import {
 	backgroundWallpaper,
 	displaySettingsConfig,
 	expressiveCodeConfig,
+	footerConfig,
 	profileConfig,
 	siteConfig,
 } from "@/config";
@@ -133,6 +134,15 @@ const siteLang = lang.replace("_", "-");
             hashMode={analyticsConfig.la51Analytics?.hashMode}
             screenRecord={analyticsConfig.la51Analytics?.screenRecord}
             />
+    )}
+
+    {footerConfig.enable && (
+        <script
+            is:inline
+            data-swup-ignore-script
+            defer
+            src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
+        ></script>
     )}
 
     <title>{pageTitle}</title>
