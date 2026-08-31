@@ -93,7 +93,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		children: [
 			{
 				name: "GitHub",
-				url: "https://github.com/CuteLeaf/Firefly",
+				url: "https://github.com/wlunan",
 				external: true,
 				icon: "fa7-brands:github",
 			},
@@ -103,12 +103,12 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				external: true,
 				icon: "material-symbols:bookmarks",
 			},
-			{
-				name: "QQ交流群",
-				url: "https://qm.qq.com/q/ZGsFa8qX2G",
-				external: true,
-				icon: "fa7-brands:qq",
-			},
+			// {
+			// 	name: "QQ交流群",
+			// 	url: "https://qm.qq.com/q/ZGsFa8qX2G",
+			// 	external: true,
+			// 	icon: "fa7-brands:qq",
+			// },
 			{
 				name: "Firefly文档",
 				url: "https://docs-firefly.cuteleaf.cn",

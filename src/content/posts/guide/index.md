@@ -11,7 +11,7 @@ tags:
   - 指南
 category: 博客指南
 date: 2026-08-07T15:02:42+08:00
-lastmod: 2026-08-07T17:22:30+08:00
+lastmod: 2026-08-31T15:01:12+08:00
 ---
 
 这个博客模板是基于 [Astro](https://astro.build/) 构建的。对于本指南中未提及的内容，您可以在 [Astro 文档](https://docs.astro.build/) 中找到答案。
@@ -118,4 +118,4 @@ URL：`/posts/how-to-use-firefly-blog-theme`
 
 - Slug 一旦设置并发布，建议不要随意更改，以免影响 SEO 和已存在的链接
 - 如果多个文章使用相同的 slug，后面的文章会覆盖前面的
-- Slug 会自动转换为小写
+	- Slug 会自动转换为小写

@@ -11,7 +11,7 @@
 
 **🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
 
-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.vkfc.dpdns.org/)**
+**🏠我的博客： [https://blog.vkfc.dpdns.org/](https://blog.vkfc.dpdns.org/)**
 
 **📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
 
