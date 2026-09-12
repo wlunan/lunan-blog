@@ -313,6 +313,13 @@ export const ja: Translation = {
 	[Key.cardBorder]: "カードのボーダーと影",
 	[Key.cardFollowTheme]: "カードのテーマカラー追随",
 
+	// サイドバー
+	[Key.sidebarSettings]: "サイドバー",
+	[Key.sidebarModeBoth]: "両方表示",
+	[Key.sidebarModeHideLeft]: "左を非表示",
+	[Key.sidebarModeHideRight]: "右を非表示",
+	[Key.sidebarModeNone]: "両方非表示",
+
 	// 投稿リストレイアウト
 	[Key.postListLayout]: "投稿リストレイアウト",
 	[Key.postListLayoutList]: "リスト",

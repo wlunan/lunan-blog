@@ -263,6 +263,13 @@ const hideSidebarOnPostPage =
       return true;
     }
 
+    // 访客收起了承载目录的右侧栏（none = 全部收起，left = 关右侧）：
+    // 侧边栏目录随之消失，此时始终显示悬浮目录
+    const sidebarMode = document.documentElement.getAttribute('data-sidebar-mode');
+    if (sidebarMode === 'none' || sidebarMode === 'left') {
+      return true;
+    }
+
     // 双侧边栏模式（含文章页临时双侧栏）：小屏幕或侧边栏目录未启用时显示悬浮目录
     const effectiveIsBothSidebars = sidebarPosition === 'both' || showBothSidebarsOnPost;
     if (effectiveIsBothSidebars) {
@@ -361,6 +368,11 @@ const hideSidebarOnPostPage =
 
     // 监听布局模式切换（通过自定义事件）
     window.addEventListener('layoutChange', () => {
+      updateFloatingTOCVisibility();
+    });
+
+    // 监听侧边栏模式切换（显示设置面板 → 外观 → 侧边栏）
+    window.addEventListener('sidebarModeChange', () => {
       updateFloatingTOCVisibility();
     });
 

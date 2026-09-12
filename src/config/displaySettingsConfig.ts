@@ -20,6 +20,10 @@ export const displaySettingsConfig: DisplaySettingsConfig = {
 	// 卡片风格跟随主题色开关
 	cardFollowThemeSwitchable: true,
 
+	// 侧边栏显示开关（访客可在「外观」中收起/展开左右侧边栏）
+	// 需要 sidebarConfig.enable 为 true 才显示该设置项
+	sidebarSwitchable: true,
+
 	// ── 壁纸 (Wallpaper) ──────────────────────────────────
 
 	// 壁纸模式切换开关

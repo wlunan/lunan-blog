@@ -308,6 +308,13 @@ export const zh_TW: Translation = {
 	[Key.cardBorder]: "卡片邊框和陰影",
 	[Key.cardFollowTheme]: "卡片跟隨主題色",
 
+	// 側邊欄
+	[Key.sidebarSettings]: "側邊欄",
+	[Key.sidebarModeBoth]: "不關閉",
+	[Key.sidebarModeHideLeft]: "關左側",
+	[Key.sidebarModeHideRight]: "關右側",
+	[Key.sidebarModeNone]: "關閉",
+
 	// 文章佈局
 	[Key.postListLayout]: "文章佈局",
 	[Key.postListLayoutList]: "清單",

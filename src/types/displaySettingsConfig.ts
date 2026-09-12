@@ -1,5 +1,12 @@
 // 显示设置面板开关配置类型
 
+// 侧边栏显示模式（访客在「外观」设置中选择，覆盖 sidebarLayoutConfig.position）
+//   "both"  → 不关闭：左右侧边栏都显示
+//   "left"  → 关右侧：只保留左侧边栏
+//   "right" → 关左侧：只保留右侧边栏
+//   "none"  → 关闭：两侧都收起，正文铺满整行
+export type SidebarMode = "both" | "left" | "right" | "none";
+
 export type OverlaySwitchable =
 	| boolean
 	| {
@@ -22,6 +29,9 @@ export type DisplaySettingsConfig = {
 
 	// 卡片风格跟随主题色开关
 	cardFollowThemeSwitchable: boolean;
+
+	// 侧边栏显示开关（允许访客在「外观」中收起/展开左右侧边栏）
+	sidebarSwitchable: boolean;
 
 	// ── 壁纸 (Wallpaper) ──────────────────────────────────
 

@@ -313,6 +313,13 @@ export const ko: Translation = {
 	[Key.cardBorder]: "카드 테두리와 그림자",
 	[Key.cardFollowTheme]: "카드 테마 색상 따르기",
 
+	// 사이드바
+	[Key.sidebarSettings]: "사이드바",
+	[Key.sidebarModeBoth]: "모두 표시",
+	[Key.sidebarModeHideLeft]: "왼쪽 숨기기",
+	[Key.sidebarModeHideRight]: "오른쪽 숨기기",
+	[Key.sidebarModeNone]: "모두 숨기기",
+
 	// Post List Layout
 	[Key.postListLayout]: "게시글 목록 레이아웃",
 	[Key.postListLayoutList]: "목록형",

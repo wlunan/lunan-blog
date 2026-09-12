@@ -308,6 +308,13 @@ enum I18nKey {
 	cardBorder = "cardBorder",
 	cardFollowTheme = "cardFollowTheme",
 
+	// 侧边栏
+	sidebarSettings = "sidebarSettings",
+	sidebarModeBoth = "sidebarModeBoth",
+	sidebarModeHideLeft = "sidebarModeHideLeft",
+	sidebarModeHideRight = "sidebarModeHideRight",
+	sidebarModeNone = "sidebarModeNone",
+
 	// 文章布局
 	postListLayout = "postListLayout",
 	postListLayoutList = "postListLayoutList",

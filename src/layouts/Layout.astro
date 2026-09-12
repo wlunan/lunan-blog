@@ -559,6 +559,23 @@ const siteLang = lang.replace("_", "-");
           document.documentElement.setAttribute("data-banner-title-enabled", bannerTitleEnabled);
         }
       })();
+
+      // 初始化侧边栏显示模式 - 在 html 元素上设置属性，CSS 会立即生效（避免首屏闪一下侧边栏）
+      (function applySidebarMode() {
+        const sidebarMode = localStorage.getItem("sidebarMode");
+        if (sidebarMode) {
+          document.documentElement.setAttribute("data-sidebar-mode", sidebarMode);
+          return;
+        }
+        // 兼容早期的布尔开关 sidebarVisible
+        const legacySidebarVisible = localStorage.getItem("sidebarVisible");
+        if (legacySidebarVisible !== null) {
+          document.documentElement.setAttribute(
+            "data-sidebar-mode",
+            legacySidebarVisible === "true" ? "both" : "none"
+          );
+        }
+      })();
     </script>
     <style
       define:vars={{

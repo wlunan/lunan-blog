@@ -9,7 +9,10 @@ export type {
 } from "./booknavConfig";
 export type { CommentConfig } from "./commentConfig";
 export type { CoverImageConfig } from "./coverImageConfig";
-export type { DisplaySettingsConfig } from "./displaySettingsConfig";
+export type {
+	DisplaySettingsConfig,
+	SidebarMode,
+} from "./displaySettingsConfig";
 export type { DynamicConfig } from "./dynamicConfig";
 export type { SakuraConfig } from "./effectsConfig";
 

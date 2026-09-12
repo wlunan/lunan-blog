@@ -66,6 +66,67 @@ html.is-page-transitioning .banner-home-text-overlay {
     }
 }
 
+/* ────────────────────────────────────────────────────────────
+   访客手动收起/展开侧边栏（四选一）
+   由「显示设置 → 外观 → 侧边栏」控制，模式写在 <html data-sidebar-mode> 上：
+     both / left / right / none  →  不关闭 / 关右侧 / 关左侧 / 关闭
+   使用纯 CSS 覆盖构建期生成的响应式列定义，避免首屏闪烁，
+   也无需在 Swup 翻页后重新计算。
+   ──────────────────────────────────────────────────────────── */
+
+/* 需要隐藏的侧边栏（#left-sidebar / #right-sidebar 由 SideBar.astro 渲染） */
+html[data-sidebar-mode="none"] #left-sidebar,
+html[data-sidebar-mode="none"] #right-sidebar,
+html[data-sidebar-mode="left"] #right-sidebar,
+html[data-sidebar-mode="right"] #left-sidebar {
+    display: none !important;
+}
+
+/* none（关闭）：网格收敛为单列，主内容与页脚铺满整行 */
+html[data-sidebar-mode="none"] #main-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+}
+
+html[data-sidebar-mode="none"] #main-content-column,
+html[data-sidebar-mode="none"] #main-grid > .footer {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+}
+
+/* 平板及以上（768px 起，与主题 md: 断点一致）：按模式重排网格 */
+@media (min-width: 768px) {
+    /* left（关右侧）：只保留左侧边栏 + 正文 */
+    html[data-sidebar-mode="left"] #main-grid {
+        grid-template-columns: 17.5rem minmax(0, 1fr) !important;
+    }
+
+    html[data-sidebar-mode="left"] #left-sidebar {
+        display: block !important;
+    }
+
+    html[data-sidebar-mode="left"] #main-content-column,
+    html[data-sidebar-mode="left"] #main-grid > .footer {
+        grid-column: 2 / -1 !important;
+    }
+
+    /* right（关左侧）：只保留右侧边栏 + 正文
+       右侧栏在窄屏默认 xl 才显示，这里强制在 md 起显示并放到第 2 列 */
+    html[data-sidebar-mode="right"] #main-grid {
+        grid-template-columns: minmax(0, 1fr) 17.5rem !important;
+    }
+
+    html[data-sidebar-mode="right"] #right-sidebar {
+        display: block !important;
+        grid-row: 1 / 3 !important;
+        grid-column: 2 / 3 !important;
+    }
+
+    html[data-sidebar-mode="right"] #main-content-column,
+    html[data-sidebar-mode="right"] #main-grid > .footer {
+        grid-column: 1 / 2 !important;
+    }
+}
+
 /* 移动端横幅优化 - 小屏手机 (320px - 480px) */
 @media (max-width: 480px) {
     /* Banner wrapper 高度统一 65vh，让主内容区自然覆盖约 10% 横幅 */

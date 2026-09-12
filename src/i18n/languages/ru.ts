@@ -317,6 +317,13 @@ export const ru: Translation = {
 	[Key.cardBorder]: "Рамка и тень карточек",
 	[Key.cardFollowTheme]: "Карточки跟随主题色",
 
+	// Боковая панель
+	[Key.sidebarSettings]: "Боковая панель",
+	[Key.sidebarModeBoth]: "Показать оба",
+	[Key.sidebarModeHideLeft]: "Скрыть левую",
+	[Key.sidebarModeHideRight]: "Скрыть правую",
+	[Key.sidebarModeNone]: "Скрыть оба",
+
 	// Макет списка сообщений
 	[Key.postListLayout]: "Макет списка сообщений",
 	[Key.postListLayoutList]: "Список",

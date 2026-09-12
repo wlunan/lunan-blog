@@ -18,6 +18,7 @@ import {
 	getDefaultOverlayCardOpacity,
 	getDefaultOverlayOpacity,
 	getDefaultSakuraEnabled,
+	getDefaultSidebarMode,
 	getDefaultWavesEnabled,
 	getHue,
 	getStoredBannerCarouselEnabled,
@@ -29,6 +30,7 @@ import {
 	getStoredOverlayCardOpacity,
 	getStoredOverlayOpacity,
 	getStoredSakuraEnabled,
+	getStoredSidebarMode,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
 	setBannerCarouselEnabled,
@@ -41,6 +43,7 @@ import {
 	setOverlayCardOpacity,
 	setOverlayOpacity,
 	setSakuraEnabled,
+	setSidebarMode,
 	setWallpaperMode,
 	setWavesEnabled,
 } from "@utils/setting-utils";
@@ -49,9 +52,10 @@ import Icon from "@/components/common/Icon.svelte";
 import {
 	backgroundWallpaper,
 	displaySettingsConfig,
+	sidebarLayoutConfig,
 	siteConfig,
 } from "@/config";
-import type { WALLPAPER_MODE } from "@/types/config";
+import type { SidebarMode, WALLPAPER_MODE } from "@/types/config";
 
 type OverlaySliderItem = {
 	key: "opacity" | "blur" | "cardOpacity";
@@ -104,6 +108,8 @@ let cardBorderEnabled = $state(false);
 const defaultCardBorderEnabled = getDefaultCardBorderEnabled();
 let cardFollowThemeEnabled = $state(false);
 const defaultCardFollowThemeEnabled = getDefaultCardFollowThemeEnabled();
+let sidebarMode = $state<SidebarMode>("both");
+const defaultSidebarMode = getDefaultSidebarMode();
 
 const isWallpaperSwitchable = displaySettingsConfig.wallpaperModeSwitchable;
 const allowLayoutSwitch = displaySettingsConfig.layoutSwitchable;
@@ -124,6 +130,57 @@ const isSakuraSwitchable = displaySettingsConfig.sakuraSwitchable;
 const isCardBorderSwitchable = displaySettingsConfig.cardBorderSwitchable;
 const isCardFollowThemeSwitchable =
 	displaySettingsConfig.cardFollowThemeSwitchable;
+// 侧边栏开关：需要配置里启用了侧边栏，且允许访客手动收起/展开
+const isSidebarSwitchable =
+	displaySettingsConfig.sidebarSwitchable && sidebarLayoutConfig.enable;
+
+// 侧边栏模式选项：某一侧没有启用任何组件时，不提供"只留该侧"，避免出现两个效果相同的选项
+const sidebarModeOptions = $derived.by(() => {
+	const hasLeft =
+		sidebarLayoutConfig.position !== "right" &&
+		sidebarLayoutConfig.leftComponents.some((comp) => comp.enable);
+	const hasRight =
+		sidebarLayoutConfig.position !== "left" &&
+		sidebarLayoutConfig.rightComponents.some((comp) => comp.enable);
+
+	const options: {
+		mode: SidebarMode;
+		label: string;
+		showLeft: boolean;
+		showRight: boolean;
+	}[] = [
+		{
+			mode: "both",
+			label: i18n(I18nKey.sidebarModeBoth),
+			showLeft: hasLeft,
+			showRight: hasRight,
+		},
+		{
+			mode: "right",
+			label: i18n(I18nKey.sidebarModeHideLeft),
+			showLeft: false,
+			showRight: true,
+		},
+		{
+			mode: "left",
+			label: i18n(I18nKey.sidebarModeHideRight),
+			showLeft: true,
+			showRight: false,
+		},
+		{
+			mode: "none",
+			label: i18n(I18nKey.sidebarModeNone),
+			showLeft: false,
+			showRight: false,
+		},
+	];
+
+	// 只有单侧栏时，只保留「不关闭 / 关闭」
+	if (!(hasLeft && hasRight)) {
+		return options.filter((o) => o.mode === "both" || o.mode === "none");
+	}
+	return options;
+});
 // 是否有任何横幅设置可显示（后续添加新设置时在此处添加条件）
 const hasBannerSettings =
 	isWavesSwitchable ||
@@ -176,14 +233,16 @@ const hasAnyContent =
 	allowLayoutSwitch ||
 	hasBannerSettings ||
 	hasOverlaySettings ||
-	isSakuraSwitchable;
+	isSakuraSwitchable ||
+	isSidebarSwitchable;
 
 // --- Tab visibility ---
 const hasAppearanceTab = $derived(
 	showThemeColor ||
 		allowLayoutSwitch ||
 		isCardBorderSwitchable ||
-		isCardFollowThemeSwitchable,
+		isCardFollowThemeSwitchable ||
+		isSidebarSwitchable,
 );
 const hasWallpaperTab = $derived(
 	isWallpaperSwitchable ||
@@ -407,6 +466,16 @@ function resetCardSettings() {
 	}
 }
 
+function selectSidebarMode(mode: SidebarMode) {
+	sidebarMode = mode;
+	setSidebarMode(mode);
+}
+
+function resetSidebarMode() {
+	sidebarMode = defaultSidebarMode;
+	setSidebarMode(defaultSidebarMode);
+}
+
 function switchWallpaperMode(newMode: WALLPAPER_MODE) {
 	wallpaperMode = newMode;
 	setWallpaperMode(newMode);
@@ -498,6 +567,9 @@ onMount(() => {
 	// 从localStorage读取卡片样式状态
 	cardBorderEnabled = getStoredCardBorderEnabled();
 	cardFollowThemeEnabled = getStoredCardFollowThemeEnabled();
+
+	// 从localStorage读取侧边栏显示模式
+	sidebarMode = getStoredSidebarMode();
 
 	// 从localStorage读取全屏透明设置状态
 	overlayOpacity = getStoredOverlayOpacity();
@@ -739,6 +811,41 @@ $effect(() => {
 					</div>
 				</button>
 				{/if}
+			</div>
+		</div>
+		{/if}
+
+		<!-- Sidebar Section -->
+		{#if isSidebarSwitchable}
+		<div>
+			<div class="section-title">
+				{i18n(I18nKey.sidebarSettings)}
+				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
+						class:opacity-0={sidebarMode === defaultSidebarMode} class:pointer-events-none={sidebarMode === defaultSidebarMode}
+						disabled={sidebarMode === defaultSidebarMode} aria-hidden={sidebarMode === defaultSidebarMode ? "true" : undefined} onclick={resetSidebarMode}>
+					<div class="text-(--btn-content)">
+						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+					</div>
+				</button>
+			</div>
+			<div class="grid grid-cols-2 gap-2">
+				{#each sidebarModeOptions as option (option.mode)}
+				<button
+					aria-label={option.label}
+					title={option.label}
+					class="btn-regular rounded-md py-2 px-2 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition-all relative overflow-hidden"
+					class:opacity-60={sidebarMode !== option.mode}
+					class:bg-(--btn-regular-bg-hover)={sidebarMode === option.mode}
+					onclick={() => selectSidebarMode(option.mode)}
+				>
+					<svg class="w-7 h-5" viewBox="0 0 28 18" fill="currentColor" aria-hidden="true">
+						<rect x="1" y="1" width="6" height="16" rx="2" opacity={option.showLeft ? 1 : 0.22} />
+						<rect x="9.5" y="1" width="9" height="16" rx="2" />
+						<rect x="21" y="1" width="6" height="16" rx="2" opacity={option.showRight ? 1 : 0.22} />
+					</svg>
+					<span class="text-xs font-medium">{option.label}</span>
+				</button>
+				{/each}
 			</div>
 		</div>
 		{/if}

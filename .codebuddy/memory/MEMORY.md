@@ -20,6 +20,9 @@
 - 访问计数：用 **Vercount**（`https://events.vercount.one/js`，免注册按域名统计），页脚 span id 为 `vercount_value_site_pv` / `vercount_value_site_uv`；已弃用不蒜子 busuanzi。
 - 图标/logo 命名规范：`lunan-light-{size}.png`（亮色模式）、`lunan-dark-{size}.png`（暗色模式），通过 `theme` 字段生成 `media="(prefers-color-scheme: …)"`。
 - `siteConfig.navbar.logo.value` 必须是**相对 `src/` 的路径**（`Navbar.astro` 用 `import.meta.glob` 解析），不能以 `/` 开头；`public/` 路径才用 `/` 开头。
+- 访客端可见的开关（显示设置面板）统一套路：`displaySettingsConfig.ts` + `types/displaySettingsConfig.ts` 加 `xxxSwitchable` → `setting-utils.ts` 加 `getDefault/getStored/applyToDocument/set` 四件套并派发自定义事件 → `DisplaySettingsIntegrated.svelte` 加 state、切换/重置函数、`onMount` 读取 localStorage、UI，并务必并入 `hasAnyContent` 与所属 tab 的可见性判断。要首屏无闪烁，就在 `Layout.astro` head 的内联 `<script>` 里同步设置 html 属性。
+- **`src/constants/icons-data.json` 没有生成脚本**（Biome 忽略、需提交）：`Icon.svelte` 用 `@iconify/svelte/offline` + 这个本地子集，缺图标只渲染灰色占位圆。新增图标必须手工从 `node_modules/@iconify-json/<集合>/icons.json` 取条目写进去。
+- 侧边栏四模式（不关闭 / 关左侧 / 关右侧 / 关闭）：状态在 `localStorage["sidebarMode"]`（值 `both|left|right|none`；旧布尔键 `sidebarVisible` 会自动迁移）→ `<html data-sidebar-mode>`，靠 `layout-styles.css` 里的纯 CSS 覆盖重排网格（隐藏对应侧栏 + 覆盖 `#main-grid` 的列定义 + 重设 `#main-content-column`/`.footer`/`#right-sidebar` 的 grid 位置），完全不参与 JS 网格重算，因此无首屏闪烁、Swup 翻页后无需重放。默认值取 `sidebarLayoutConfig.position`。
 
 ## 编辑工具注意
 - 同一个文件的多处 `replace_in_file` **不要并行**，否则后一次写入会基于旧内容覆盖前一次的结果（会静默丢失改动）。同文件多改要串行、或一次覆盖更大区块。

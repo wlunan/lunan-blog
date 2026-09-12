@@ -315,6 +315,13 @@ export const en: Translation = {
 	[Key.cardBorder]: "Card Border & Shadow",
 	[Key.cardFollowTheme]: "Card Follow Theme Color",
 
+	// Sidebar
+	[Key.sidebarSettings]: "Sidebar",
+	[Key.sidebarModeBoth]: "Show Both",
+	[Key.sidebarModeHideLeft]: "Hide Left",
+	[Key.sidebarModeHideRight]: "Hide Right",
+	[Key.sidebarModeNone]: "Hide Both",
+
 	// Post List Layout
 	[Key.postListLayout]: "Post List Layout",
 	[Key.postListLayoutList]: "List",

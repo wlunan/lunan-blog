@@ -9,12 +9,17 @@ import {
 	WALLPAPER_NONE,
 	WALLPAPER_OVERLAY,
 } from "@constants/constants";
-import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
+import type {
+	LIGHT_DARK_MODE,
+	SidebarMode,
+	WALLPAPER_MODE,
+} from "@/types/config";
 import {
 	backgroundWallpaper,
 	displaySettingsConfig,
 	expressiveCodeConfig,
 	sakuraConfig,
+	sidebarLayoutConfig,
 	siteConfig,
 } from "../config";
 import { isHomePage as checkIsHomePage } from "./layout-utils";
@@ -1172,6 +1177,67 @@ export function setSakuraEnabled(enabled: boolean): void {
 	window.dispatchEvent(
 		new CustomEvent("sakuraToggle", { detail: { enabled } }),
 	);
+}
+
+// Sidebar mode functions
+export const SIDEBAR_MODES: SidebarMode[] = ["both", "left", "right", "none"];
+
+function isSidebarMode(value: string | null): value is SidebarMode {
+	return value !== null && (SIDEBAR_MODES as string[]).includes(value);
+}
+
+export function getDefaultSidebarMode(): SidebarMode {
+	if (!sidebarLayoutConfig.enable) {
+		return "none";
+	}
+	return sidebarLayoutConfig.position;
+}
+
+export function getStoredSidebarMode(): SidebarMode {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.getItem !== "function"
+	) {
+		return getDefaultSidebarMode();
+	}
+	const stored = localStorage.getItem("sidebarMode");
+	if (isSidebarMode(stored)) {
+		return stored;
+	}
+	// 兼容早期的布尔开关 sidebarVisible
+	const legacyVisible = localStorage.getItem("sidebarVisible");
+	if (legacyVisible !== null) {
+		return legacyVisible === "true" ? "both" : "none";
+	}
+	return getDefaultSidebarMode();
+}
+
+export function applySidebarModeToDocument(mode: SidebarMode): void {
+	if (typeof document === "undefined") {
+		return;
+	}
+	// 更新 html 属性，layout-styles.css 中的规则会立即生效（无需重算网格）
+	document.documentElement.setAttribute("data-sidebar-mode", mode);
+}
+
+export function setSidebarMode(mode: SidebarMode): void {
+	const safeMode: SidebarMode = isSidebarMode(mode)
+		? mode
+		: getDefaultSidebarMode();
+	if (
+		typeof localStorage !== "undefined" &&
+		typeof localStorage.setItem === "function"
+	) {
+		localStorage.setItem("sidebarMode", safeMode);
+	}
+	applySidebarModeToDocument(safeMode);
+	if (typeof window !== "undefined") {
+		window.dispatchEvent(
+			new CustomEvent("sidebarModeChange", {
+				detail: { mode: safeMode },
+			}),
+		);
+	}
 }
 
 // Banner title functions
