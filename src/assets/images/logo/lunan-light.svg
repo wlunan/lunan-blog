@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="74 72 366 366" width="192" height="192" role="img" aria-label="Lunan">
+  <path
+    d="M153 158 V378 H287"
+    fill="none"
+    stroke="#2A50D8"
+    stroke-width="72"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M345 96 Q356 137 397 148 Q356 159 345 200 Q334 159 293 148 Q334 137 345 96 Z"
+    fill="#F5A623"
+  />
+</svg>

@@ -72,17 +72,17 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			// 是否启用主页横幅文字
 			enable: true,
 			// 主页横幅主标题
-			title: "Lovely firefly!",
+			title: "记录你所思",
 			// 主页横幅主标题字体大小
 			titleSize: "4.5rem",
-			// 主页横幅副标题
+			// 主页横幅副标题（打字机开启时会循环显示全部）
 			subtitle: [
-				"In Reddened Chrysalis, I Once Rest",
-				"From Shattered Sky, I Free Fall",
-				"Amidst Silenced Stars, I Deep Sleep",
-				"Upon Lighted Fyrefly, I Soon Gaze",
-				"From Undreamt Night, I Thence Shine",
-				"In Finalized Morrow, I Full Bloom",
+				"把想清楚的事，写下来",
+				"AI 是工具，思考才是主角",
+				"技术之外，也想聊聊生活",
+				"记录，是为了更好地思考",
+				"所思所感，皆可成文",
+				"慢慢写，也慢慢想",
 			],
 			// 主页横幅副标题字体大小
 			subtitleSize: "1.5rem",

@@ -51,14 +51,50 @@ export const siteConfig: SiteConfig = {
 
 	// Favicon 配置
 	// 如果启用了OpenGraph图片功能，数组中需要包含png格式的favicon图标
+	// 图标矢量源文件：public/favicon/lunan-light.svg / lunan-dark.svg
+	// 亮暗两套图标会通过 prefers-color-scheme 自动切换
 	favicon: [
 		{
-			// 图标文件路径
-			src: "/favicon/firefly-32.png",
-			// 可选，指定主题 'light' | 'dark'
-			// theme: "light",
-			// 可选，图标大小
-			// sizes: "32x32",
+			// 亮色模式图标
+			src: "/favicon/lunan-light-32.png",
+			theme: "light",
+			sizes: "32x32",
+		},
+		{
+			src: "/favicon/lunan-light-128.png",
+			theme: "light",
+			sizes: "128x128",
+		},
+		{
+			src: "/favicon/lunan-light-180.png",
+			theme: "light",
+			sizes: "180x180",
+		},
+		{
+			src: "/favicon/lunan-light-192.png",
+			theme: "light",
+			sizes: "192x192",
+		},
+		{
+			// 暗色模式图标
+			src: "/favicon/lunan-dark-32.png",
+			theme: "dark",
+			sizes: "32x32",
+		},
+		{
+			src: "/favicon/lunan-dark-128.png",
+			theme: "dark",
+			sizes: "128x128",
+		},
+		{
+			src: "/favicon/lunan-dark-180.png",
+			theme: "dark",
+			sizes: "180x180",
+		},
+		{
+			src: "/favicon/lunan-dark-192.png",
+			theme: "dark",
+			sizes: "192x192",
 		},
 	],
 
@@ -75,9 +111,9 @@ export const siteConfig: SiteConfig = {
 		// 使用 Astro 图标库时不需要设置 valueDark，图标会自动跟随主题亮暗色切换
 		logo: {
 			type: "image",
-			value: "assets/images/logo/firefly-light.png",
-			valueDark: "assets/images/logo/firefly-dark.png",
-			alt: "🍀",
+			value: "assets/images/logo/lunan-light.png",
+			valueDark: "assets/images/logo/lunan-dark.png",
+			alt: "Lunan",
 		},
 		// 导航栏标题
 		title: "Lunan",
