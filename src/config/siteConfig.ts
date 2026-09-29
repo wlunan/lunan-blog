@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/types/siteConfig";
+import adminConfig from "./adminConfig.json";
 
 // 定义站点语言
 // 语言代码，例如：'zh_CN', 'zh_TW', 'en', 'ja', 'ru', 'ko'。
@@ -6,47 +7,39 @@ const SITE_LANG = "zh_CN";
 
 export const siteConfig: SiteConfig = {
 	// 站点标题
-	title: "Lunan的博客",
+	title: adminConfig.site.title,
 
 	// 站点副标题
-	subtitle: "Lunan",
+	subtitle: adminConfig.site.subtitle,
 
 	// 站点 URL
-	site_url: "https://blog.vkfc.dpdns.org/",
+	site_url: adminConfig.site.siteUrl,
 
 	// 站点描述
-	description:
-		"记录你所思",
+	description: adminConfig.site.description,
 
 	// 站点关键词
-	keywords: [
-		"Lunan",
-		"lunan",
-		"Astro",
-		"博客",
-		"技术博客",
-		"静态博客",
-	],
+	keywords: adminConfig.site.keywords,
 
 	// 主题色
 	themeColor: {
 		// 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
-		hue: 220,
+		hue: adminConfig.appearance.themeHue,
 		// 默认模式："light" 亮色，"dark" 暗色，"system" 跟随系统
-		defaultMode: "system",
+		defaultMode: adminConfig.appearance.defaultMode as SiteConfig["themeColor"]["defaultMode"],
 	},
 
 	// 页面整体宽度（单位：rem）
 	// 数值越大可以让页面内容区域更宽
 	// 在使用单侧栏边栏时，建议调低一些宽度以获得更好的视觉效果。
-	pageWidth: 100,
+	pageWidth: adminConfig.appearance.pageWidth,
 
 	// 网站Card样式配置
 	card: {
 		// 是否开启卡片边框和阴影，开启后让网站更有立体感
-		border: false,
+		border: adminConfig.appearance.cardBorder,
 		// 是否让卡片风格跟随主题色相
-		followTheme: false,
+		followTheme: adminConfig.appearance.cardFollowTheme,
 	},
 
 	// Favicon 配置
@@ -116,7 +109,7 @@ export const siteConfig: SiteConfig = {
 			alt: "Lunan",
 		},
 		// 导航栏标题
-		title: "Lunan",
+		title: adminConfig.site.navbarTitle,
 		// 全宽导航栏，导航栏是否占满屏幕宽度
 		widthFull: false,
 		// 导航菜单对齐方式，left：左对齐，center：居中
@@ -137,35 +130,37 @@ export const siteConfig: SiteConfig = {
 	// 页面开关配置 - 控制特定页面的访问权限，设为false会返回404并自动隐藏对应的导航栏菜单项
 	pages: {
 		// 友链页面开关
-		friends: true,
+		friends: adminConfig.pages.friends,
 		// 打赏页面开关
-		sponsor: false,
+		sponsor: adminConfig.pages.sponsor,
 		// 留言板页面开关，需要配置评论系统
-		guestbook: true,
+		guestbook: adminConfig.pages.guestbook,
 		// 番组计划页面开关，含追番、游戏、书籍和音乐
-		bangumi: false,
+		bangumi: adminConfig.pages.bangumi,
 		// 相册页面开关
-		gallery: true,
+		gallery: adminConfig.pages.gallery,
 		// 追番页面开关
-		anime: false,
+		anime: adminConfig.pages.anime,
 		// 动态页面开关
-		dynamic: true,
+		dynamic: adminConfig.pages.dynamic,
 		// 书签导航页面开关
-		booknav: true,
+		booknav: adminConfig.pages.booknav,
 	},
 
 	// 分类导航栏开关，在首页和归档页顶部显示分类快捷导航
-	categoryBar: true,
+	categoryBar: adminConfig.content.categoryBar,
 
 	// 归档页是否折叠非最新年份文章，禁用后默认展开全部年份
-	foldArticle: true,
+	foldArticle: adminConfig.content.foldArticle,
 
 	// 文章列表布局配置
 	postListLayout: {
 		// 默认布局模式："list" 列表模式（单列布局），"grid" 网格模式（多列布局）
-		defaultMode: "list",
+		defaultMode: adminConfig.appearance.desktopPostLayout as "list" | "grid",
 		// 移动端默认布局模式，不设置则跟随 defaultMode
-		mobileDefaultMode: "grid",
+		mobileDefaultMode: adminConfig.appearance.mobilePostLayout as
+			| "list"
+			| "grid",
 		// 列表模式下封面图显示在哪一侧："right" 右侧，"left" 左侧
 		// 网格模式的封面固定在卡片顶部，不受此项影响
 		coverPosition: "right",
@@ -272,7 +267,7 @@ export const siteConfig: SiteConfig = {
 	// 分页配置
 	pagination: {
 		// 每页显示的文章数量
-		postsPerPage: 10,
+		postsPerPage: adminConfig.content.postsPerPage,
 	},
 
 	// 图像优化及响应式配置

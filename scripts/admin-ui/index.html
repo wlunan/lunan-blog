@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light" />
+		<title>Lunan 内容工作台</title>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<div class="app-shell">
+			<aside class="sidebar" id="sidebar">
+				<div class="brand">
+					<div class="brand-mark" aria-hidden="true"><span>L</span></div>
+					<div>
+						<strong>Lunan Studio</strong>
+						<small>内容工作台</small>
+					</div>
+				</div>
+
+				<nav class="main-nav" aria-label="后台导航">
+					<button class="nav-item is-active" type="button" data-view="overview">
+						<span class="nav-icon">⌂</span><span>概览</span>
+					</button>
+					<button class="nav-item" type="button" data-view="posts">
+						<span class="nav-icon">✎</span><span>文章</span>
+						<span class="nav-count" id="sidebar-post-count">—</span>
+					</button>
+					<button class="nav-item" type="button" data-view="settings">
+						<span class="nav-icon">◫</span><span>站点设置</span>
+					</button>
+				</nav>
+
+				<div class="sidebar-note">
+					<span class="status-dot"></span>
+					<div><strong>本地模式</strong><small>修改会写入当前项目</small></div>
+				</div>
+			</aside>
+
+			<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+			<main class="workspace">
+				<header class="topbar">
+					<button class="icon-button menu-button" id="menu-button" type="button" aria-label="打开导航">☰</button>
+					<div class="breadcrumb">
+						<span>Workspace</span><b>/</b><strong id="current-view-name">概览</strong>
+					</div>
+					<a class="site-link" id="site-link" href="http://localhost:4321" target="_blank" rel="noreferrer">
+						查看博客 <span aria-hidden="true">↗</span>
+					</a>
+				</header>
+
+				<div class="content-area">
+					<section class="view is-active" id="view-overview" data-view-panel="overview">
+						<div class="page-heading heading-with-action">
+							<div>
+								<p class="eyebrow">TODAY'S DESK</p>
+								<h1>上午好，Lunan</h1>
+								<p>从一个安静、清晰的地方开始今天的写作。</p>
+							</div>
+							<button class="primary-button" type="button" data-action="new-post"><span>＋</span> 写新文章</button>
+						</div>
+
+						<div class="stat-grid">
+							<article class="stat-card stat-card-featured">
+								<span class="stat-label">全部文章</span><strong id="stat-total">—</strong><small>项目中的 Markdown 内容</small>
+							</article>
+							<article class="stat-card">
+								<span class="stat-label">已发布</span><strong id="stat-published">—</strong><small>当前可进入构建</small>
+							</article>
+							<article class="stat-card">
+								<span class="stat-label">草稿箱</span><strong id="stat-drafts">—</strong><small>仍在打磨的内容</small>
+							</article>
+						</div>
+
+						<div class="panel recent-panel">
+							<div class="panel-heading">
+								<div><p class="eyebrow">RECENT</p><h2>最近文章</h2></div>
+								<button class="text-button" type="button" data-view="posts">查看全部 →</button>
+							</div>
+							<div id="recent-posts" class="recent-list"><div class="loading-row">正在读取文章…</div></div>
+						</div>
+					</section>
+
+					<section class="view" id="view-posts" data-view-panel="posts">
+						<div class="page-heading heading-with-action compact-heading">
+							<div><p class="eyebrow">LIBRARY</p><h1>文章</h1><p>管理博客中的全部 Markdown 与 MDX 内容。</p></div>
+							<button class="primary-button" type="button" data-action="new-post"><span>＋</span> 新建文章</button>
+						</div>
+						<div class="panel posts-panel">
+							<div class="posts-toolbar">
+								<label class="search-box"><span aria-hidden="true">⌕</span><input id="post-search" type="search" placeholder="搜索标题、分类或标签" /></label>
+								<div class="filter-pills" aria-label="文章状态筛选">
+									<button class="filter-pill is-active" type="button" data-filter="all">全部</button>
+									<button class="filter-pill" type="button" data-filter="published">已发布</button>
+									<button class="filter-pill" type="button" data-filter="draft">草稿</button>
+								</div>
+							</div>
+							<div class="post-table-head" aria-hidden="true"><span>文章</span><span>分类</span><span>日期</span><span>状态</span></div>
+							<div id="post-list" class="post-list"><div class="loading-row">正在读取文章…</div></div>
+						</div>
+					</section>
+
+					<section class="view" id="view-editor" data-view-panel="editor">
+						<div class="editor-heading">
+							<button class="back-button" id="editor-back" type="button">← 返回文章列表</button>
+							<div class="editor-actions">
+								<span class="save-state" id="post-save-state">尚未修改</span>
+								<button class="primary-button" id="save-post" type="button">保存文章</button>
+							</div>
+						</div>
+
+						<div class="editor-layout">
+							<section class="editor-main panel">
+								<div class="new-file-row" id="new-file-row">
+									<label for="post-file-name">保存文件名</label>
+									<div class="file-name-input"><input id="post-file-name" type="text" placeholder="例如：我的第一篇文章" /><span>.md</span></div>
+								</div>
+								<label class="title-input-wrap"><span class="sr-only">文章标题</span><textarea id="post-title" rows="1" placeholder="输入文章标题"></textarea></label>
+								<div class="editor-tabs" role="tablist">
+									<button class="editor-tab is-active" type="button" data-pane="write">撰写</button>
+									<button class="editor-tab" type="button" data-pane="preview">预览</button>
+								</div>
+								<div class="markdown-toolbar" aria-label="Markdown 快捷工具">
+									<button type="button" data-insert="bold" title="粗体"><b>B</b></button>
+									<button type="button" data-insert="italic" title="斜体"><i>I</i></button>
+									<button type="button" data-insert="heading" title="二级标题">H2</button>
+									<button type="button" data-insert="link" title="链接">↗</button>
+									<button type="button" data-insert="quote" title="引用">“</button>
+									<button type="button" data-insert="code" title="代码">&lt;/&gt;</button>
+								</div>
+								<div class="writing-pane is-active" data-editor-pane="write"><textarea id="post-body" spellcheck="true" placeholder="从这里开始写作…"></textarea></div>
+								<article class="preview-pane markdown-body" id="markdown-preview" data-editor-pane="preview"></article>
+							</section>
+
+							<aside class="metadata-panel panel">
+								<div class="metadata-heading"><p class="eyebrow">DETAILS</p><h2>文章设置</h2></div>
+								<label class="field"><span>发布日期</span><input id="post-published" type="date" /></label>
+								<label class="field"><span>更新日期 <small>可选</small></span><input id="post-updated" type="date" /></label>
+								<label class="field"><span>分类</span><input id="post-category" type="text" placeholder="例如：随笔" /></label>
+								<label class="field"><span>标签 <small>用逗号分隔</small></span><input id="post-tags" type="text" placeholder="Astro, 博客" /></label>
+								<label class="field"><span>文章摘要</span><textarea id="post-description" rows="4" placeholder="用于文章卡片与搜索摘要"></textarea></label>
+								<label class="field"><span>封面图片</span><input id="post-image" type="text" placeholder="图片路径或 URL" /></label>
+								<div class="toggle-stack">
+									<label class="switch-row"><span><b>草稿</b><small>暂不发布这篇文章</small></span><input id="post-draft" type="checkbox" /><i></i></label>
+									<label class="switch-row"><span><b>置顶</b><small>优先显示在文章列表</small></span><input id="post-pinned" type="checkbox" /><i></i></label>
+									<label class="switch-row"><span><b>评论</b><small>允许读者参与讨论</small></span><input id="post-comment" type="checkbox" /><i></i></label>
+								</div>
+								<details class="advanced-fields">
+									<summary>更多设置</summary>
+									<label class="field"><span>语言</span><input id="post-lang" type="text" placeholder="zh_CN" /></label>
+									<label class="field"><span>作者</span><input id="post-author" type="text" /></label>
+									<label class="field"><span>来源链接</span><input id="post-source-link" type="text" /></label>
+									<label class="field"><span>许可名称</span><input id="post-license-name" type="text" /></label>
+									<label class="field"><span>许可链接</span><input id="post-license-url" type="text" /></label>
+									<label class="field"><span>访问密码</span><input id="post-password" type="text" /></label>
+									<label class="field"><span>密码提示</span><input id="post-password-hint" type="text" /></label>
+								</details>
+							</aside>
+						</div>
+					</section>
+
+					<section class="view" id="view-settings" data-view-panel="settings">
+						<div class="page-heading heading-with-action compact-heading">
+							<div><p class="eyebrow">CONFIGURATION</p><h1>站点设置</h1><p>这里管理最常用的公开信息、外观与页面开关。</p></div>
+							<div class="editor-actions"><span class="save-state" id="config-save-state">尚未修改</span><button class="primary-button" id="save-config" type="button">保存设置</button></div>
+						</div>
+
+						<form id="config-form" class="settings-grid">
+							<section class="settings-section panel">
+								<div class="section-number">01</div><div class="section-heading"><h2>站点信息</h2><p>搜索结果、浏览器标题和导航栏会使用这些内容。</p></div>
+								<div class="form-grid two-columns">
+									<label class="field"><span>站点标题</span><input id="config-title" type="text" required /></label>
+									<label class="field"><span>副标题</span><input id="config-subtitle" type="text" /></label>
+									<label class="field span-two"><span>站点地址</span><input id="config-site-url" type="url" required /></label>
+									<label class="field"><span>导航栏标题</span><input id="config-navbar-title" type="text" required /></label>
+									<label class="field"><span>关键词 <small>用逗号分隔</small></span><input id="config-keywords" type="text" /></label>
+									<label class="field span-two"><span>站点描述</span><textarea id="config-description" rows="3"></textarea></label>
+								</div>
+							</section>
+
+							<section class="settings-section panel">
+								<div class="section-number">02</div><div class="section-heading"><h2>个人资料</h2><p>展示在侧栏个人卡片中的身份与链接。</p></div>
+								<div class="form-grid two-columns">
+									<label class="field"><span>显示名称</span><input id="config-profile-name" type="text" required /></label>
+									<label class="field"><span>头像路径</span><input id="config-avatar" type="text" /></label>
+									<label class="field span-two"><span>个人签名</span><input id="config-bio" type="text" /></label>
+								</div>
+								<div class="subsection-heading"><h3>个人链接</h3><button class="secondary-button" id="add-profile-link" type="button">＋ 添加链接</button></div>
+								<div id="profile-links" class="profile-links"></div>
+							</section>
+
+							<section class="settings-section panel">
+								<div class="section-number">03</div><div class="section-heading"><h2>外观与内容</h2><p>调整主题色、页面密度和文章列表行为。</p></div>
+								<div class="form-grid three-columns">
+									<label class="field"><span>主题色相 <output id="hue-value">220°</output></span><div class="range-row"><input id="config-theme-hue" type="range" min="0" max="360" /><i id="hue-swatch"></i></div></label>
+									<label class="field"><span>默认主题</span><select id="config-default-mode"><option value="system">跟随系统</option><option value="light">亮色</option><option value="dark">暗色</option></select></label>
+									<label class="field"><span>页面宽度（rem）</span><input id="config-page-width" type="number" min="60" max="160" /></label>
+									<label class="field"><span>桌面文章布局</span><select id="config-desktop-layout"><option value="list">列表</option><option value="grid">网格</option></select></label>
+									<label class="field"><span>移动端文章布局</span><select id="config-mobile-layout"><option value="list">列表</option><option value="grid">网格</option></select></label>
+									<label class="field"><span>每页文章数量</span><input id="config-posts-per-page" type="number" min="1" max="50" /></label>
+								</div>
+								<div class="toggle-grid">
+									<label class="switch-row"><span><b>卡片边框</b><small>增加边框与阴影</small></span><input id="config-card-border" type="checkbox" /><i></i></label>
+									<label class="switch-row"><span><b>卡片跟随主题</b><small>使用当前主题色</small></span><input id="config-card-follow" type="checkbox" /><i></i></label>
+									<label class="switch-row"><span><b>分类导航</b><small>首页显示分类入口</small></span><input id="config-category-bar" type="checkbox" /><i></i></label>
+									<label class="switch-row"><span><b>折叠历史归档</b><small>默认收起旧年份</small></span><input id="config-fold-article" type="checkbox" /><i></i></label>
+								</div>
+							</section>
+
+							<section class="settings-section panel">
+								<div class="section-number">04</div><div class="section-heading"><h2>页面开关</h2><p>关闭后对应页面会返回 404，并从导航栏中隐藏。</p></div>
+								<div class="page-switches" id="page-switches"></div>
+							</section>
+						</form>
+					</section>
+				</div>
+			</main>
+		</div>
+
+		<div class="toast" id="toast" role="status" aria-live="polite"></div>
+		<script src="/vendor/marked.min.js"></script>
+		<script type="module" src="/app.js"></script>
+	</body>
+</html>

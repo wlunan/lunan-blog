@@ -3,6 +3,7 @@
   "type": "module",
   "version": "6.15.6",
   "scripts": {
+    "admin": "node scripts/admin-server.mjs",
     "dev": "astro dev",
     "start": "astro dev",
     "check": "astro check",
@@ -13,6 +14,7 @@
     "new-dynamic": "tsx scripts/new-dynamic.js",
     "new-d": "tsx scripts/new-dynamic.js",
     "new-post": "node scripts/new-post.js",
+    "test:admin": "node --test scripts/admin-server.test.mjs",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
     "preinstall": "npx only-allow pnpm",

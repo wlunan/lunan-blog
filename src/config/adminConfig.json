@@ -1,0 +1,53 @@
+{
+	"site": {
+		"title": "Lunan的博客",
+		"subtitle": "Lunan",
+		"siteUrl": "https://blog.vkfc.dpdns.org/",
+		"description": "记录你所思",
+		"keywords": ["Lunan", "lunan", "Astro", "博客", "技术博客", "静态博客"],
+		"navbarTitle": "Lunan"
+	},
+	"profile": {
+		"avatar": "assets/images/avatar.jpg",
+		"name": "Lunan",
+		"bio": "",
+		"links": [
+			{
+				"name": "GitHub",
+				"icon": "fa7-brands:github",
+				"url": "https://github.com/wlunan",
+				"showName": false
+			},
+			{
+				"name": "Email",
+				"icon": "fa7-solid:envelope",
+				"url": "ihshao@outlook.com",
+				"showName": false
+			}
+		]
+	},
+	"appearance": {
+		"themeHue": 220,
+		"defaultMode": "system",
+		"pageWidth": 100,
+		"cardBorder": false,
+		"cardFollowTheme": false,
+		"desktopPostLayout": "list",
+		"mobilePostLayout": "grid"
+	},
+	"content": {
+		"postsPerPage": 10,
+		"categoryBar": true,
+		"foldArticle": true
+	},
+	"pages": {
+		"friends": true,
+		"sponsor": false,
+		"guestbook": true,
+		"bangumi": false,
+		"gallery": true,
+		"anime": false,
+		"dynamic": true,
+		"booknav": true
+	}
+}
