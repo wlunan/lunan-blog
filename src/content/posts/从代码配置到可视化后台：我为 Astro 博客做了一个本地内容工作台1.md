@@ -1,22 +1,4 @@
 ---
-title: "从代码配置到可视化后台：我为 Astro 博客做了一个本地内容工作台"
-published: "2026-09-29"
-description: ""
-image: ""
-tags: []
-category: ""
-draft: true
-lang: ""
-pinned: false
-author: "Lunan"
-sourceLink: ""
-licenseName: ""
-licenseUrl: ""
-comment: true
-password: ""
-passwordHint: ""
----
----
 title: 从代码配置到可视化后台：我为 Astro 博客做了一个本地内容工作台
 published: 2026-09-29
 description: 不引入数据库和线上 CMS，用 Node.js、本地文件与配置覆盖层，为 Astro 静态博客增加文章编辑和完整配置管理能力。

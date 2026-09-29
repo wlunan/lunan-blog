@@ -294,7 +294,7 @@ button {
 .content-area {
 	width: min(1280px, 100%);
 	margin: 0 auto;
-	padding: 48px clamp(22px, 4vw, 58px) 70px;
+	padding: 32px clamp(22px, 4vw, 58px) 70px;
 }
 
 .view {
@@ -1639,7 +1639,7 @@ p {
 
 @media (max-width: 680px) {
 	.topbar { height: 61px; padding: 0 16px; }
-	.content-area { padding: 30px 16px 55px; }
+	.content-area { padding: 22px 16px 55px; }
 	.breadcrumb span,
 	.breadcrumb b { display: none; }
 	.site-link { font-size: 0; }

@@ -387,7 +387,8 @@ async function openEditor(path) {
 		const post = path ? await api(`/api/post?path=${encodeURIComponent(path)}`) : defaultPost();
 		fillPostForm(post);
 		showView("editor");
-		setTimeout(() => $("#post-title").focus(), 50);
+		autoSizeTitle();
+		$("#post-title").focus();
 	} catch (error) {
 		showToast(error.message, true);
 	}
