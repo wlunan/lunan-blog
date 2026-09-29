@@ -1,14 +1,53 @@
 import { createServer } from "node:http";
+import { execFile } from "node:child_process";
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import matter from "gray-matter";
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POSTS_ROOT = path.join(PROJECT_ROOT, "src", "content", "posts");
 const CONFIG_PATH = path.join(PROJECT_ROOT, "src", "config", "adminConfig.json");
+const FOOTER_HTML_PATH = path.join(PROJECT_ROOT, "src", "config", "FooterConfig.html");
+const CONFIG_LOADER_PATH = path.join(PROJECT_ROOT, "scripts", "admin-config-loader.ts");
+const TSX_CLI_PATH = path.join(PROJECT_ROOT, "node_modules", "tsx", "dist", "cli.mjs");
 const UI_ROOT = path.join(PROJECT_ROOT, "scripts", "admin-ui");
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
+const execFileAsync = promisify(execFile);
+
+const CONFIG_MODULE_KEYS = new Set([
+	"siteConfig",
+	"profileConfig",
+	"announcementConfig",
+	"backgroundWallpaper",
+	"coverImageConfig",
+	"displaySettingsConfig",
+	"sidebarLayoutConfig",
+	"sakuraConfig",
+	"fontConfig",
+	"fontsList",
+	"expressiveCodeConfig",
+	"commentConfig",
+	"analyticsConfig",
+	"musicPlayerConfig",
+	"dynamicConfig",
+	"friendsPageConfig",
+	"friendsConfig",
+	"galleryConfig",
+	"booknavPageConfig",
+	"booknavConfig",
+	"sponsorConfig",
+	"footerConfig",
+	"licenseConfig",
+	"navBarConfig",
+	"LinkPresets",
+	"navBarSearchConfig",
+	"mermaidConfig",
+	"plantumlConfig",
+	"spineModelConfig",
+	"live2dWidgetConfig",
+]);
 
 const EDITOR_FIELDS = [
 	"title",
@@ -176,6 +215,122 @@ export function validateConfig(value) {
 	};
 }
 
+function assertJsonValue(value, depth = 0) {
+	if (depth > 16) throw new RequestError("配置嵌套层级过深");
+	if (value === null || typeof value === "boolean") return;
+	if (typeof value === "number") {
+		if (!Number.isFinite(value)) throw new RequestError("配置中存在无效数字");
+		return;
+	}
+	if (typeof value === "string") {
+		if (value.length > 100_000) throw new RequestError("单个配置文本过长");
+		return;
+	}
+	if (Array.isArray(value)) {
+		if (value.length > 500) throw new RequestError("配置列表项目过多");
+		for (const item of value) assertJsonValue(item, depth + 1);
+		return;
+	}
+	if (isRecord(value)) {
+		const entries = Object.entries(value);
+		if (entries.length > 500) throw new RequestError("配置对象字段过多");
+		for (const [key, item] of entries) {
+			if (["__proto__", "constructor", "prototype"].includes(key)) {
+				throw new RequestError("配置包含不允许的字段");
+			}
+			assertJsonValue(item, depth + 1);
+		}
+		return;
+	}
+	throw new RequestError("配置包含不支持的数据类型");
+}
+
+async function loadAllConfigModules() {
+	const { stdout } = await execFileAsync(
+		process.execPath,
+		[TSX_CLI_PATH, CONFIG_LOADER_PATH],
+		{
+			cwd: PROJECT_ROOT,
+			encoding: "utf8",
+			maxBuffer: 5 * 1024 * 1024,
+			windowsHide: true,
+		},
+	);
+	return JSON.parse(stdout);
+}
+
+function syncOverrideFromBasicForm(overrides, config) {
+	if (isRecord(overrides.siteConfig)) {
+		const site = overrides.siteConfig;
+		site.title = config.site.title;
+		site.subtitle = config.site.subtitle;
+		site.site_url = config.site.siteUrl;
+		site.description = config.site.description;
+		site.keywords = config.site.keywords;
+		site.navbar = { ...(isRecord(site.navbar) ? site.navbar : {}), title: config.site.navbarTitle };
+		site.themeColor = {
+			...(isRecord(site.themeColor) ? site.themeColor : {}),
+			hue: config.appearance.themeHue,
+			defaultMode: config.appearance.defaultMode,
+		};
+		site.pageWidth = config.appearance.pageWidth;
+		site.card = {
+			...(isRecord(site.card) ? site.card : {}),
+			border: config.appearance.cardBorder,
+			followTheme: config.appearance.cardFollowTheme,
+		};
+		site.postListLayout = {
+			...(isRecord(site.postListLayout) ? site.postListLayout : {}),
+			defaultMode: config.appearance.desktopPostLayout,
+			mobileDefaultMode: config.appearance.mobilePostLayout,
+		};
+		site.pagination = {
+			...(isRecord(site.pagination) ? site.pagination : {}),
+			postsPerPage: config.content.postsPerPage,
+		};
+		site.categoryBar = config.content.categoryBar;
+		site.foldArticle = config.content.foldArticle;
+		site.pages = config.pages;
+	}
+	if (isRecord(overrides.profileConfig)) {
+		overrides.profileConfig = {
+			...overrides.profileConfig,
+			...config.profile,
+		};
+	}
+}
+
+function syncBasicFormFromModule(adminData, key, value) {
+	if (key === "siteConfig" && isRecord(value)) {
+		adminData.site = {
+			title: value.title,
+			subtitle: value.subtitle ?? "",
+			siteUrl: value.site_url,
+			description: value.description ?? "",
+			keywords: Array.isArray(value.keywords) ? value.keywords : [],
+			navbarTitle: isRecord(value.navbar) ? value.navbar.title ?? value.title : value.title,
+		};
+		adminData.appearance = {
+			themeHue: value.themeColor?.hue ?? 220,
+			defaultMode: value.themeColor?.defaultMode ?? "system",
+			pageWidth: value.pageWidth ?? 100,
+			cardBorder: value.card?.border ?? false,
+			cardFollowTheme: value.card?.followTheme ?? false,
+			desktopPostLayout: value.postListLayout?.defaultMode ?? "list",
+			mobilePostLayout: value.postListLayout?.mobileDefaultMode ?? "grid",
+		};
+		adminData.content = {
+			postsPerPage: value.pagination?.postsPerPage ?? 10,
+			categoryBar: value.categoryBar ?? true,
+			foldArticle: value.foldArticle ?? true,
+		};
+		adminData.pages = value.pages;
+	}
+	if (key === "profileConfig" && isRecord(value)) {
+		adminData.profile = value;
+	}
+}
+
 function yamlScalar(value) {
 	if (typeof value === "boolean" || typeof value === "number") return String(value);
 	return JSON.stringify(value ?? "");
@@ -185,6 +340,9 @@ function serializeField(key, value, newline) {
 	if (key === "tags") {
 		if (!Array.isArray(value) || value.length === 0) return "tags: []";
 		return `tags:${newline}${value.map((tag) => `  - ${yamlScalar(tag)}`).join(newline)}`;
+	}
+	if (["published", "updated"].includes(key) && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+		return `${key}: ${value}`;
 	}
 	return `${key}: ${yamlScalar(value)}`;
 }
@@ -283,6 +441,31 @@ function validatePostFields(value) {
 		.filter(Boolean)
 		.slice(0, 30);
 	return fields;
+}
+
+export function preparePostInput(body, fieldValue) {
+	if (typeof body !== "string") throw new RequestError("正文格式不正确");
+	const formFields = requireRecord(fieldValue, "文章信息");
+	const hasFrontmatter = /^\uFEFF?---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/.test(body);
+	if (!hasFrontmatter) {
+		return {
+			body,
+			fields: validatePostFields(formFields),
+			source: null,
+		};
+	}
+
+	const parsed = matter(body);
+	const importedFields = {};
+	for (const key of EDITOR_FIELDS) {
+		if (Object.hasOwn(parsed.data, key)) importedFields[key] = parsed.data[key];
+	}
+
+	return {
+		body: parsed.content.replace(/^\r?\n/, ""),
+		fields: validatePostFields({ ...formFields, ...importedFields }),
+		source: body,
+	};
 }
 
 function safePostPath(relativePath) {
@@ -405,12 +588,48 @@ async function handleRequest(request, response) {
 		return sendFile(response, path.join(PROJECT_ROOT, "public", "assets", "js", "marked.min.js"));
 	}
 	if (request.method === "GET" && pathname === "/api/config") {
-		return sendJson(response, 200, JSON.parse(await readFile(CONFIG_PATH, "utf8")));
+		const { overrides: _overrides, ...config } = JSON.parse(
+			await readFile(CONFIG_PATH, "utf8"),
+		);
+		return sendJson(response, 200, config);
 	}
 	if (request.method === "PUT" && pathname === "/api/config") {
 		const config = validateConfig(await readJsonBody(request));
-		await writeFile(CONFIG_PATH, `${JSON.stringify(config, null, "\t")}\n`, "utf8");
+		const current = JSON.parse(await readFile(CONFIG_PATH, "utf8"));
+		const overrides = isRecord(current.overrides) ? current.overrides : {};
+		syncOverrideFromBasicForm(overrides, config);
+		await writeFile(
+			CONFIG_PATH,
+			`${JSON.stringify({ ...config, overrides }, null, "\t")}\n`,
+			"utf8",
+		);
 		return sendJson(response, 200, { ok: true, config });
+	}
+	if (request.method === "GET" && pathname === "/api/config/all") {
+		const [modules, footerHtml] = await Promise.all([
+			loadAllConfigModules(),
+			readFile(FOOTER_HTML_PATH, "utf8"),
+		]);
+		return sendJson(response, 200, { modules: { ...modules, footerHtml } });
+	}
+	if (request.method === "PUT" && pathname === "/api/config/module") {
+		const payload = requireRecord(await readJsonBody(request), "配置模块");
+		const key = requireString(payload.key, "配置模块名称", 100);
+		if (key === "footerHtml") {
+			if (typeof payload.value !== "string") throw new RequestError("页脚 HTML 必须是文本");
+			if (payload.value.length > 200_000) throw new RequestError("页脚 HTML 内容过长");
+			await writeFile(FOOTER_HTML_PATH, payload.value, "utf8");
+			return sendJson(response, 200, { ok: true, key, value: payload.value });
+		}
+		if (!CONFIG_MODULE_KEYS.has(key)) throw new RequestError("不支持该配置模块");
+		assertJsonValue(payload.value);
+		const adminData = JSON.parse(await readFile(CONFIG_PATH, "utf8"));
+		const overrides = isRecord(adminData.overrides) ? adminData.overrides : {};
+		overrides[key] = payload.value;
+		adminData.overrides = overrides;
+		syncBasicFormFromModule(adminData, key, payload.value);
+		await writeFile(CONFIG_PATH, `${JSON.stringify(adminData, null, "\t")}\n`, "utf8");
+		return sendJson(response, 200, { ok: true, key, value: payload.value });
 	}
 	if (request.method === "GET" && pathname === "/api/posts") {
 		return sendJson(response, 200, { posts: await listPosts() });
@@ -421,18 +640,18 @@ async function handleRequest(request, response) {
 	}
 	if (request.method === "PUT" && pathname === "/api/post") {
 		const payload = requireRecord(await readJsonBody(request), "文章");
-		const fields = validatePostFields(payload.fields);
-		if (typeof payload.body !== "string") throw new RequestError("正文格式不正确");
+		const prepared = preparePostInput(payload.body, payload.fields);
+		const { fields } = prepared;
 
 		const isNew = !payload.originalPath;
 		const relativePath = isNew ? safeNewFileName(payload.fileName) : payload.originalPath;
 		const fullPath = safePostPath(relativePath);
-		let source = "";
-		if (!isNew) source = await readFile(fullPath, "utf8");
+		let source = prepared.source ?? "";
+		if (prepared.source === null && !isNew) source = await readFile(fullPath, "utf8");
 		const nextSource = patchFrontmatter(source, fields);
 		const frontmatter = nextSource.match(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/)?.[0];
 		if (!frontmatter) throw new RequestError("无法生成文章头信息", 500);
-		const body = payload.body.replace(/^(?:\r?\n)+/, "");
+		const body = prepared.body.replace(/^(?:\r?\n)+/, "");
 		const finalSource = `${frontmatter}${body}${body.endsWith("\n") ? "" : "\n"}`;
 		await writeFile(fullPath, finalSource, isNew ? { encoding: "utf8", flag: "wx" } : "utf8");
 		return sendJson(response, 200, {
@@ -458,6 +677,39 @@ export function createAdminServer() {
 	});
 }
 
+function listenOnce(server, port) {
+	return new Promise((resolve, reject) => {
+		const handleError = (error) => {
+			server.off("listening", handleListening);
+			reject(error);
+		};
+		const handleListening = () => {
+			server.off("error", handleError);
+			resolve();
+		};
+		server.once("error", handleError);
+		server.once("listening", handleListening);
+		server.listen(port, "127.0.0.1");
+	});
+}
+
+export async function listenAdminServer(
+	server,
+	preferredPort,
+	{ allowFallback = true, maxAttempts = 20 } = {},
+) {
+	let port = preferredPort;
+	for (let attempt = 0; attempt < maxAttempts; attempt += 1, port += 1) {
+		try {
+			await listenOnce(server, port);
+			return { port, fallback: port !== preferredPort };
+		} catch (error) {
+			if (error?.code !== "EADDRINUSE" || !allowFallback) throw error;
+		}
+	}
+	throw new Error(`端口 ${preferredPort} 到 ${port - 1} 均被占用`);
+}
+
 function parsePort() {
 	const index = process.argv.indexOf("--port");
 	if (index === -1) return 4322;
@@ -470,10 +722,21 @@ function parsePort() {
 
 const isDirectRun = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isDirectRun) {
-	const port = parsePort();
+	const preferredPort = parsePort();
+	const allowFallback = !process.argv.includes("--port");
 	const server = createAdminServer();
-	server.listen(port, "127.0.0.1", () => {
-		console.log(`\n  Lunan 内容工作台已启动：\n  http://127.0.0.1:${port}\n`);
-		console.log("  仅本机可访问，按 Ctrl+C 停止。\n");
-	});
+	listenAdminServer(server, preferredPort, { allowFallback })
+		.then(({ port, fallback }) => {
+			if (fallback) console.log(`\n  端口 ${preferredPort} 已被占用，已自动改用 ${port}。`);
+			console.log(`\n  Lunan 内容工作台已启动：\n  http://127.0.0.1:${port}\n`);
+			console.log("  仅本机可访问，按 Ctrl+C 停止。\n");
+		})
+		.catch((error) => {
+			if (error?.code === "EADDRINUSE") {
+				console.error(`\n  端口 ${preferredPort} 已被占用，请关闭占用程序或换一个端口。\n`);
+			} else {
+				console.error(`\n  工作台启动失败：${error.message}\n`);
+			}
+			process.exitCode = 1;
+		});
 }

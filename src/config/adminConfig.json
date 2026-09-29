@@ -4,7 +4,14 @@
 		"subtitle": "Lunan",
 		"siteUrl": "https://blog.vkfc.dpdns.org/",
 		"description": "记录你所思",
-		"keywords": ["Lunan", "lunan", "Astro", "博客", "技术博客", "静态博客"],
+		"keywords": [
+			"Lunan",
+			"lunan",
+			"Astro",
+			"博客",
+			"技术博客",
+			"静态博客"
+		],
 		"navbarTitle": "Lunan"
 	},
 	"profile": {
@@ -49,5 +56,163 @@
 		"anime": false,
 		"dynamic": true,
 		"booknav": true
+	},
+	"overrides": {
+		"siteConfig": {
+			"title": "Lunan的博客",
+			"subtitle": "Lunan",
+			"site_url": "https://blog.vkfc.dpdns.org/",
+			"description": "记录你所思",
+			"keywords": [
+				"Lunan",
+				"lunan",
+				"Astro",
+				"博客",
+				"技术博客",
+				"静态博客"
+			],
+			"themeColor": {
+				"hue": 220,
+				"defaultMode": "system"
+			},
+			"pageWidth": 100,
+			"card": {
+				"border": false,
+				"followTheme": false
+			},
+			"favicon": [
+				{
+					"src": "/favicon/lunan-light-32.png",
+					"theme": "light",
+					"sizes": "32x32"
+				},
+				{
+					"src": "/favicon/lunan-light-128.png",
+					"theme": "light",
+					"sizes": "128x128"
+				},
+				{
+					"src": "/favicon/lunan-light-180.png",
+					"theme": "light",
+					"sizes": "180x180"
+				},
+				{
+					"src": "/favicon/lunan-light-192.png",
+					"theme": "light",
+					"sizes": "192x192"
+				},
+				{
+					"src": "/favicon/lunan-dark-32.png",
+					"theme": "dark",
+					"sizes": "32x32"
+				},
+				{
+					"src": "/favicon/lunan-dark-128.png",
+					"theme": "dark",
+					"sizes": "128x128"
+				},
+				{
+					"src": "/favicon/lunan-dark-180.png",
+					"theme": "dark",
+					"sizes": "180x180"
+				},
+				{
+					"src": "/favicon/lunan-dark-192.png",
+					"theme": "dark",
+					"sizes": "192x192"
+				}
+			],
+			"navbar": {
+				"logo": {
+					"type": "image",
+					"value": "assets/images/logo/lunan-light.png",
+					"valueDark": "assets/images/logo/lunan-dark.png",
+					"alt": "Lunan"
+				},
+				"title": "Lunan",
+				"widthFull": false,
+				"menuAlign": "center",
+				"followTheme": false,
+				"stickyNavbar": false
+			},
+			"siteStartDate": "2026-08-07",
+			"timezone": "Asia/Shanghai",
+			"pages": {
+				"friends": true,
+				"sponsor": false,
+				"guestbook": true,
+				"bangumi": false,
+				"gallery": true,
+				"anime": false,
+				"dynamic": true,
+				"booknav": true
+			},
+			"categoryBar": true,
+			"foldArticle": true,
+			"postListLayout": {
+				"defaultMode": "list",
+				"mobileDefaultMode": "grid",
+				"coverPosition": "right",
+				"descriptionLines": 2,
+				"showStatsIcons": true,
+				"tagsPosition": "bottom",
+				"meta": {
+					"showPublished": true,
+					"showCategory": true,
+					"showTags": true,
+					"tagCount": 3,
+					"showWords": false,
+					"showReadingTime": false
+				},
+				"stats": {
+					"showPublished": true,
+					"showWords": true,
+					"showReadingTime": true
+				},
+				"grid": {
+					"masonry": false,
+					"columnWidth": 320
+				}
+			},
+			"post": {
+				"rehypeCallouts": {
+					"theme": "github",
+					"enablePythonMarkdownAdmonitions": false
+				},
+				"showLastModified": true,
+				"outdatedThreshold": 30,
+				"sharePoster": true,
+				"generateOgImages": false
+			},
+			"bangumi": {
+				"userId": "1143164",
+				"mode": "dynamic",
+				"apiUrl": "https://bgmapi.anibt.net",
+				"subjectBaseUrl": "https://bgmmi.anibt.net/subject/",
+				"categoryOrder": [
+					"anime",
+					"book",
+					"music",
+					"game"
+				]
+			},
+			"anime": {
+				"bilibili": {
+					"uid": "38932988"
+				}
+			},
+			"pagination": {
+				"postsPerPage": 10
+			},
+			"imageOptimization": {
+				"formats": "webp",
+				"quality": 85,
+				"noReferrerDomains": [
+					"*.hdslb.com",
+					"*.bilibili.com"
+				]
+			},
+			"lang": "zh_CN"
+		}
 	}
 }

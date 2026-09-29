@@ -4,6 +4,7 @@ import {
 	type NavBarSearchConfig,
 	NavBarSearchMethod,
 } from "../types/navBarConfig";
+import { withAdminConfig } from "./withAdminConfig";
 
 // ============================================================================
 // 导航栏配置 - 根据顺序动态生成导航栏链接
@@ -130,15 +131,18 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 };
 
 // 导航搜索配置
-export const navBarSearchConfig: NavBarSearchConfig = {
-	method: NavBarSearchMethod.PageFind,
-};
+export const navBarSearchConfig: NavBarSearchConfig =
+	withAdminConfig<NavBarSearchConfig>("navBarSearchConfig", {
+		method: NavBarSearchMethod.PageFind,
+	});
 
 // ============================================================================
 // 链接预设 - 可自由自定义导航栏链接的名称、图标和URL
 // Link Presets - Allows free customization of the name, icon, and URL of navigation bar links
 // ============================================================================
-export const LinkPresets: Record<string, NavBarLink> = {
+export const LinkPresets: Record<string, NavBarLink> = withAdminConfig<
+	Record<string, NavBarLink>
+>("LinkPresets", {
 	Home: {
 		name: "主页",
 		url: "/",
@@ -212,6 +216,9 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		icon: "material-symbols:bookmarks",
 		pageKey: "booknav",
 	},
-};
+});
 
-export const navBarConfig: NavBarConfig = getDynamicNavBarConfig();
+export const navBarConfig: NavBarConfig = withAdminConfig<NavBarConfig>(
+	"navBarConfig",
+	getDynamicNavBarConfig(),
+);

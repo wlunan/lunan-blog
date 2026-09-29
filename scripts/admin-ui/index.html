@@ -27,7 +27,11 @@
 						<span class="nav-count" id="sidebar-post-count">—</span>
 					</button>
 					<button class="nav-item" type="button" data-view="settings">
-						<span class="nav-icon">◫</span><span>站点设置</span>
+						<span class="nav-icon">◫</span><span>常用设置</span>
+					</button>
+					<button class="nav-item" type="button" data-view="config-center">
+						<span class="nav-icon">⚙</span><span>全部配置</span>
+						<span class="nav-count" id="config-module-count">—</span>
 					</button>
 				</nav>
 
@@ -213,6 +217,23 @@
 								<div class="page-switches" id="page-switches"></div>
 							</section>
 						</form>
+					</section>
+
+					<section class="view" id="view-config-center" data-view-panel="config-center">
+						<div class="page-heading heading-with-action compact-heading">
+							<div><p class="eyebrow">COMPLETE CONFIG</p><h1>全部配置</h1><p>覆盖主题中的全部可序列化配置，原 TypeScript 默认值与注释仍会保留。</p></div>
+							<div class="editor-actions"><span class="save-state" id="module-save-state">选择一个模块</span><button class="primary-button" id="save-module" type="button" disabled>保存当前模块</button></div>
+						</div>
+
+						<div class="config-center-layout">
+							<aside class="config-module-panel panel">
+								<label class="search-box config-search"><span aria-hidden="true">⌕</span><input id="config-module-search" type="search" placeholder="搜索配置模块" /></label>
+								<div id="config-module-list" class="config-module-list"><div class="loading-row">正在读取全部配置…</div></div>
+							</aside>
+							<section class="config-editor-panel panel" id="config-editor-panel">
+								<div class="config-empty-state"><span>⚙</span><h2>选择左侧配置模块</h2><p>所有字段都会以表单、开关或列表的形式显示。</p></div>
+							</section>
+						</div>
 					</section>
 				</div>
 			</main>

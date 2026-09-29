@@ -8,6 +8,10 @@ const state = {
 	currentPost: null,
 	postDirty: false,
 	configDirty: false,
+	modules: {},
+	selectedModule: "",
+	moduleValue: null,
+	moduleDirty: false,
 	loadingForm: false,
 	fileNameTouched: false,
 };
@@ -16,7 +20,143 @@ const viewNames = {
 	overview: "概览",
 	posts: "文章",
 	editor: "文章编辑",
-	settings: "站点设置",
+	settings: "常用设置",
+	"config-center": "全部配置",
+};
+
+const moduleMeta = [
+	["基础", "siteConfig", "站点核心", "标题、导航、文章列表、页面能力与图片优化", "站"],
+	["基础", "profileConfig", "个人资料", "头像、名称、签名与个人链接", "人"],
+	["基础", "navBarConfig", "导航菜单", "顶部导航及多级链接", "导"],
+	["基础", "LinkPresets", "导航预设", "主页、归档、分类等内置链接", "链"],
+	["基础", "navBarSearchConfig", "导航搜索", "导航栏搜索方式", "搜"],
+	["外观", "backgroundWallpaper", "背景壁纸", "壁纸、视频、横幅文字、轮播与水波纹", "景"],
+	["外观", "coverImageConfig", "文章封面", "详情页封面与随机封面接口", "图"],
+	["外观", "displaySettingsConfig", "访客显示设置", "允许访客切换的外观选项", "显"],
+	["外观", "sidebarLayoutConfig", "侧边栏布局", "左、右和移动端组件排列", "栏"],
+	["外观", "sakuraConfig", "樱花特效", "数量、透明度、速度与层级", "花"],
+	["外观", "fontConfig", "字体选择", "全局与区域字体选择", "字"],
+	["外观", "fontsList", "字体资源", "字体提供商、字重与回退字体", "Aa"],
+	["外观", "expressiveCodeConfig", "代码块", "代码主题、折叠与语言标识", "码"],
+	["内容", "announcementConfig", "公告", "公告内容、关闭按钮和跳转链接", "告"],
+	["内容", "dynamicConfig", "动态页面", "动态来源、分页、评论与 Memos", "动"],
+	["内容", "friendsPageConfig", "友链页面", "页面文案、评论和排序方式", "友"],
+	["内容", "friendsConfig", "友链列表", "站点、头像、标签与权重", "链"],
+	["内容", "galleryConfig", "相册", "相册列表、密码与瀑布流宽度", "册"],
+	["内容", "booknavPageConfig", "书签页面", "页面文案和 Favicon 服务", "签"],
+	["内容", "booknavConfig", "书签列表", "分组与站点链接", "书"],
+	["内容", "sponsorConfig", "打赏", "收款方式、打赏者和页面文案", "赏"],
+	["内容", "footerConfig", "页脚开关", "自定义页脚注入开关", "页"],
+	["内容", "footerHtml", "页脚内容", "备案号等自定义 HTML 内容", "文"],
+	["集成", "commentConfig", "评论系统", "Twikoo、Waline、Giscus、Artalk 与 Disqus", "评"],
+	["集成", "analyticsConfig", "访问统计", "Google、Clarity、Umami 与 51la", "析"],
+	["集成", "musicPlayerConfig", "音乐播放器", "音乐源、播放模式和接口", "乐"],
+	["集成", "licenseConfig", "内容许可", "文章许可协议与图标", "权"],
+	["集成", "mermaidConfig", "Mermaid", "图表明暗主题", "M"],
+	["集成", "plantumlConfig", "PlantUML", "服务器与明暗主题", "P"],
+	["组件", "spineModelConfig", "Spine 看板娘", "模型、动作、消息与响应式设置", "S"],
+	["组件", "live2dWidgetConfig", "Live2D 看板娘", "模型、菜单、气泡和动画", "L"],
+].map(([group, key, title, description, icon]) => ({ group, key, title, description, icon }));
+
+const moduleMetaByKey = Object.fromEntries(moduleMeta.map((item) => [item.key, item]));
+
+const fieldLabels = {
+	enable: "启用",
+	enabled: "启用",
+	title: "标题",
+	subtitle: "副标题",
+	description: "描述",
+	content: "内容",
+	name: "名称",
+	url: "链接地址",
+	icon: "图标",
+	type: "类型",
+	mode: "模式",
+	position: "位置",
+	weight: "权重",
+	lang: "语言",
+	image: "图片",
+	avatar: "头像",
+	bio: "个人签名",
+	links: "链接",
+	items: "项目",
+	tags: "标签",
+	pages: "页面开关",
+	keywords: "关键词",
+	pageWidth: "页面宽度",
+	showComment: "显示评论",
+	showTitle: "显示标题",
+	showOnPostPage: "文章页显示",
+	hideOnNonPostPage: "非文章页隐藏",
+	hideOnMobile: "移动端隐藏",
+	itemsPerPage: "每页数量",
+	postsPerPage: "每页文章数",
+	columnWidth: "最小列宽",
+	visitorCount: "访问量统计",
+	external: "外部链接",
+	closable: "允许关闭",
+	server: "服务地址",
+	serverURL: "服务地址",
+	apiUrl: "接口地址",
+	api: "接口地址",
+	path: "文件路径",
+	scale: "缩放比例",
+	opacity: "透明度",
+	blur: "模糊度",
+	zIndex: "层级",
+	width: "宽度",
+	height: "高度",
+	duration: "持续时间",
+	interval: "间隔时间",
+	speed: "速度",
+	volume: "音量",
+	showLyrics: "显示歌词",
+	showInNavbar: "导航栏显示",
+	showInSidebar: "侧边栏显示",
+	showSponsorsList: "显示打赏者",
+	showButtonInPost: "文章页显示按钮",
+	methods: "打赏方式",
+	sponsors: "打赏者",
+	albums: "相册列表",
+	desktop: "桌面端",
+	mobile: "移动端",
+	lightTheme: "亮色主题",
+	darkTheme: "暗色主题",
+	primaryColor: "主题色",
+	fallbacks: "回退字体",
+	weights: "字重",
+	styles: "样式",
+	subsets: "字符子集",
+	provider: "字体来源",
+	cssVariable: "CSS 变量",
+};
+
+const enumOptions = {
+	"siteConfig.themeColor.defaultMode": [["system", "跟随系统"], ["light", "亮色"], ["dark", "暗色"]],
+	"siteConfig.lang": [["zh_CN", "简体中文"], ["zh_TW", "繁体中文"], ["en", "英语"], ["ja", "日语"], ["ko", "韩语"], ["ru", "俄语"]],
+	"siteConfig.postListLayout.defaultMode": [["list", "列表"], ["grid", "网格"]],
+	"siteConfig.postListLayout.mobileDefaultMode": [["list", "列表"], ["grid", "网格"]],
+	"siteConfig.imageOptimization.formats": [["avif", "AVIF"], ["webp", "WebP"], ["both", "两种格式"]],
+	"backgroundWallpaper.mode": [["banner", "横幅"], ["fullscreen", "全屏"], ["overlay", "透明覆盖"], ["none", "纯色"]],
+	"backgroundWallpaper.common.playerMode": [["order", "顺序"], ["random", "随机"]],
+	"backgroundWallpaper.common.postInfo.mode": [["description", "文章摘要"], ["meta", "文章信息"]],
+	"backgroundWallpaper.common.navbar.transparentMode": [["semi", "半透明"], ["full", "完全透明"], ["semifull", "动态透明"]],
+	"commentConfig.type": [["none", "关闭"], ["twikoo", "Twikoo"], ["waline", "Waline"], ["giscus", "Giscus"], ["disqus", "Disqus"], ["artalk", "Artalk"]],
+	"commentConfig.waline.login": [["enable", "允许登录"], ["force", "强制登录"], ["disable", "禁止登录"]],
+	"musicPlayerConfig.mode": [["meting", "Meting"], ["gdstudio", "GD Studio"], ["local", "本地列表"]],
+	"musicPlayerConfig.playMode": [["list", "列表循环"], ["one", "单曲循环"], ["random", "随机播放"]],
+	"sidebarLayoutConfig.position": [["left", "左侧"], ["right", "右侧"], ["both", "双侧"]],
+	"sidebarLayoutConfig.tabletSidebar": [["left", "左侧"], ["right", "右侧"]],
+	"live2dWidgetConfig.position": [["bottom-left", "左下"], ["bottom-right", "右下"]],
+	"spineModelConfig.position.corner": [["bottom-left", "左下"], ["bottom-right", "右下"], ["top-left", "左上"], ["top-right", "右上"]],
+};
+
+const arrayTemplates = {
+	"sponsorConfig.sponsors": { name: "", avatar: "", amount: "", date: "" },
+	"sponsorConfig.methods": { name: "", icon: "", qrCode: "", link: "", description: "", enabled: true },
+	"friendsConfig": { title: "", imgurl: "", desc: "", siteurl: "", tags: [], weight: 0, enabled: true },
+	"galleryConfig.albums": { id: "", name: "", description: "", location: "", date: "", tags: [] },
+	"booknavConfig": { id: "", name: "", icon: "", desc: "", weight: 0, items: [] },
 };
 
 const pageLabels = {
@@ -72,6 +212,9 @@ function canLeaveCurrentView(nextView) {
 	if (current === "settings" && nextView !== "settings" && state.configDirty) {
 		return window.confirm("站点设置还有未保存的修改，确定离开吗？");
 	}
+	if (current === "config-center" && nextView !== "config-center" && state.moduleDirty) {
+		return window.confirm("当前配置模块还有未保存的修改，确定离开吗？");
+	}
 	return true;
 }
 
@@ -84,6 +227,7 @@ function showView(view) {
 	$("#current-view-name").textContent = viewNames[view] || view;
 	if (view !== "editor") state.postDirty = false;
 	if (view !== "settings") state.configDirty = false;
+	if (view !== "config-center") state.moduleDirty = false;
 	closeSidebar();
 	window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -288,9 +432,7 @@ async function savePost() {
 				body: $("#post-body").value,
 			}),
 		});
-		state.currentPost = result.post;
-		$("#new-file-row").classList.add("is-hidden");
-		setPostDirty(false);
+		fillPostForm(result.post);
 		await loadPosts();
 		showToast("文章已保存到项目中");
 	} catch (error) {
@@ -446,6 +588,206 @@ function collectConfig() {
 	};
 }
 
+function fieldLabel(key) {
+	if (!key) return "配置项";
+	return fieldLabels[key] || key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, (char) => char.toUpperCase());
+}
+
+function pathAttribute(path) {
+	return escapeHtml(JSON.stringify(path));
+}
+
+function modulePath(path) {
+	return `${state.selectedModule}${path.length ? `.${path.join(".")}` : ""}`;
+}
+
+function getAtPath(root, path) {
+	return path.reduce((value, key) => value?.[key], root);
+}
+
+function setAtPath(root, path, value) {
+	if (path.length === 0) {
+		state.moduleValue = value;
+		return;
+	}
+	const parent = getAtPath(root, path.slice(0, -1));
+	parent[path.at(-1)] = value;
+}
+
+function sensitiveField(key) {
+	return /^(password|apiKey|auth)$/i.test(key);
+}
+
+function renderEnum(value, path, key) {
+	const options = enumOptions[modulePath(path)];
+	if (!options) return null;
+	return `<select data-config-path="${pathAttribute(path)}">${options
+		.map(([optionValue, label]) => `<option value="${escapeHtml(optionValue)}" ${value === optionValue ? "selected" : ""}>${escapeHtml(label)}</option>`)
+		.join("")}</select>`;
+}
+
+function renderPrimitive(value, path, key) {
+	const label = fieldLabel(key);
+	const rawPath = path.join(".");
+	if (typeof value === "boolean") {
+		return `<label class="config-leaf switch-row"><span><b>${escapeHtml(label)}</b><small>${escapeHtml(rawPath)}</small></span><input type="checkbox" data-config-path="${pathAttribute(path)}" ${value ? "checked" : ""} /><i></i></label>`;
+	}
+
+	const enumControl = typeof value === "string" ? renderEnum(value, path, key) : null;
+	let control = enumControl;
+	if (!control && typeof value === "number") {
+		control = `<input type="number" step="any" data-config-path="${pathAttribute(path)}" value="${escapeHtml(value)}" />`;
+	}
+	if (!control && typeof value === "string") {
+		const multiline = value.includes("\n") || value.length > 90 || /^(content|description|usage|messages|welcomeMessage)$/i.test(key);
+		control = multiline
+			? `<textarea rows="4" data-config-path="${pathAttribute(path)}">${escapeHtml(value)}</textarea>`
+			: `<input type="${sensitiveField(key) ? "password" : "text"}" data-config-path="${pathAttribute(path)}" value="${escapeHtml(value)}" />`;
+	}
+	if (!control) {
+		control = `<input type="text" data-config-path="${pathAttribute(path)}" value="${escapeHtml(value ?? "")}" />`;
+	}
+	return `<label class="config-leaf field"><span>${escapeHtml(label)}<small>${escapeHtml(rawPath)}</small></span>${control}</label>`;
+}
+
+function renderArray(value, path, key, depth) {
+	const label = fieldLabel(key);
+	const lastKey = path.at(-1);
+	const knownObjectArray = Boolean(arrayTemplates[modulePath(path)])
+		|| (state.selectedModule === "booknavConfig" && lastKey === "items")
+		|| (state.selectedModule === "navBarConfig" && ["links", "children"].includes(lastKey))
+		|| (state.selectedModule === "live2dWidgetConfig" && lastKey === "items");
+	const containsObjects = knownObjectArray || value.some((item) => item !== null && typeof item === "object");
+	if (!containsObjects) {
+		return `<label class="config-leaf field"><span>${escapeHtml(label)}<small>${escapeHtml(path.join("."))} · 每行一项</small></span><textarea rows="${Math.min(Math.max(value.length + 1, 3), 9)}" data-config-path="${pathAttribute(path)}" data-config-list="true">${escapeHtml(value.join("\n"))}</textarea></label>`;
+	}
+
+	return `<section class="config-array">
+		<div class="config-array-header"><h3>${escapeHtml(label)} <small>${value.length} 项</small></h3><button class="secondary-button" type="button" data-array-add="${pathAttribute(path)}">＋ 复制新增</button></div>
+		<div class="config-array-items">${value
+			.map(
+				(item, index) => `<article class="config-array-item">
+					<div class="config-array-item-head"><span>项目 ${index + 1}</span><div class="config-array-actions">
+						<button type="button" data-array-move="up" data-array-path="${pathAttribute(path)}" data-array-index="${index}" aria-label="上移">↑</button>
+						<button type="button" data-array-move="down" data-array-path="${pathAttribute(path)}" data-array-index="${index}" aria-label="下移">↓</button>
+						<button class="danger-button" type="button" data-array-remove="${pathAttribute(path)}" data-array-index="${index}" aria-label="移除">×</button>
+					</div></div>
+					<div class="config-fields">${renderValue(item, [...path, index], `项目 ${index + 1}`, depth + 1, true)}</div>
+				</article>`,
+			)
+			.join("")}</div>
+	</section>`;
+}
+
+function renderObject(value, path, key, depth, inline = false) {
+	const fields = Object.entries(value)
+		.map(([childKey, childValue]) => renderValue(childValue, [...path, childKey], childKey, depth + 1))
+		.join("");
+	if (inline || path.length === 0) return fields;
+	return `<details class="config-object" ${depth < 2 ? "open" : ""}><summary>${escapeHtml(fieldLabel(key))}<small>${Object.keys(value).length} 个字段</small></summary><div class="config-object-fields">${fields}</div></details>`;
+}
+
+function renderValue(value, path, key, depth = 0, inline = false) {
+	if (Array.isArray(value)) return renderArray(value, path, key, depth);
+	if (value !== null && typeof value === "object") return renderObject(value, path, key, depth, inline);
+	return renderPrimitive(value, path, key);
+}
+
+function setModuleDirty(value) {
+	state.moduleDirty = value;
+	const label = $("#module-save-state");
+	label.textContent = value ? "当前模块有未保存修改" : state.selectedModule ? "当前模块已保存" : "选择一个模块";
+	label.classList.toggle("is-dirty", value);
+	$("#save-module").disabled = !state.selectedModule || !value;
+}
+
+function renderModuleList() {
+	const query = $("#config-module-search").value.trim().toLocaleLowerCase();
+	const visible = moduleMeta.filter((item) => {
+		if (!(item.key in state.modules)) return false;
+		return !query || `${item.title} ${item.description} ${item.key}`.toLocaleLowerCase().includes(query);
+	});
+	let currentGroup = "";
+	$("#config-module-list").innerHTML = visible.length
+		? visible
+				.map((item) => {
+					const heading = item.group !== currentGroup ? `<div class="config-module-group">${item.group}</div>` : "";
+					currentGroup = item.group;
+					return `${heading}<button class="config-module-button ${state.selectedModule === item.key ? "is-active" : ""}" type="button" data-module-key="${item.key}"><span>${item.icon}</span><span><b>${item.title}</b><small>${item.description}</small></span></button>`;
+				})
+				.join("")
+		: '<div class="empty-state">没有匹配的配置模块。</div>';
+}
+
+function renderModuleEditor() {
+	const meta = moduleMetaByKey[state.selectedModule];
+	if (!meta) return;
+	const isFooterHtml = state.selectedModule === "footerHtml";
+	const fields = isFooterHtml
+		? `<div class="config-notice">此内容会直接注入页脚，请只填写你信任的 HTML。保存前不会执行其中的脚本。</div><textarea class="config-html-editor" data-config-path="[]" aria-label="页脚 HTML">${escapeHtml(state.moduleValue)}</textarea>`
+		: `<div class="config-notice">后台保存的是覆盖项，原配置文件中的默认值和注释不会被删除。部分构建期配置需要重启 <code>pnpm dev</code> 才会生效。</div><div class="config-fields">${renderValue(state.moduleValue, [], meta.title, 0, true)}</div>`;
+	$("#config-editor-panel").innerHTML = `<header class="config-editor-header"><div><h2>${escapeHtml(meta.title)}</h2><p>${escapeHtml(meta.description)}</p></div><span class="config-source-tag">${escapeHtml(state.selectedModule)}</span></header>${fields}`;
+}
+
+function openModule(key, force = false) {
+	if (!force && state.moduleDirty && !window.confirm("当前配置模块还有未保存的修改，确定切换吗？")) return;
+	state.selectedModule = key;
+	state.moduleValue = structuredClone(state.modules[key]);
+	renderModuleList();
+	renderModuleEditor();
+	setModuleDirty(false);
+}
+
+async function loadAllModules(selectDefault = true) {
+	const data = await api("/api/config/all");
+	state.modules = data.modules;
+	$("#config-module-count").textContent = Object.keys(state.modules).length;
+	renderModuleList();
+	if (selectDefault || !state.selectedModule) openModule("siteConfig", true);
+	else if (state.selectedModule in state.modules) openModule(state.selectedModule, true);
+}
+
+function arrayTemplate(path, array) {
+	if (array.length) return structuredClone(array.at(-1));
+	const exact = arrayTemplates[modulePath(path)];
+	if (exact) return structuredClone(exact);
+	const lastKey = path.at(-1);
+	if (state.selectedModule === "booknavConfig" && lastKey === "items") {
+		return { title: "", url: "", desc: "", icon: "", weight: 0 };
+	}
+	if (state.selectedModule === "navBarConfig" && ["links", "children"].includes(lastKey)) {
+		return { name: "新链接", url: "/", icon: "material-symbols:link", external: false };
+	}
+	if (state.selectedModule === "live2dWidgetConfig" && lastKey === "items") {
+		return { icon: "mdi:link", label: "新菜单", action: "home" };
+	}
+	return {};
+}
+
+async function saveModule() {
+	if (!state.selectedModule || !state.moduleDirty) return;
+	const button = $("#save-module");
+	button.disabled = true;
+	button.textContent = "保存中…";
+	try {
+		const result = await api("/api/config/module", {
+			method: "PUT",
+			body: JSON.stringify({ key: state.selectedModule, value: state.moduleValue }),
+		});
+		state.modules[state.selectedModule] = structuredClone(result.value);
+		setModuleDirty(false);
+		if (["siteConfig", "profileConfig"].includes(state.selectedModule)) {
+			fillConfigForm(await api("/api/config"));
+		}
+		showToast(`${moduleMetaByKey[state.selectedModule].title}已保存`);
+	} catch (error) {
+		showToast(error.message, true);
+	} finally {
+		button.textContent = "保存当前模块";
+		button.disabled = !state.moduleDirty;
+	}
+}
+
 async function saveConfig() {
 	const form = $("#config-form");
 	if (!form.reportValidity()) return;
@@ -455,6 +797,7 @@ async function saveConfig() {
 	try {
 		const result = await api("/api/config", { method: "PUT", body: JSON.stringify(collectConfig()) });
 		fillConfigForm(result.config);
+		if (!state.moduleDirty) await loadAllModules(false);
 		showToast("站点设置已保存");
 	} catch (error) {
 		showToast(error.message, true);
@@ -492,6 +835,40 @@ function bindEvents() {
 			removeButton.closest(".profile-link-row").remove();
 			setConfigDirty(true);
 		}
+
+		const moduleButton = event.target.closest("[data-module-key]");
+		if (moduleButton) openModule(moduleButton.dataset.moduleKey);
+
+		const addArrayButton = event.target.closest("[data-array-add]");
+		if (addArrayButton) {
+			const path = JSON.parse(addArrayButton.dataset.arrayAdd);
+			const array = getAtPath(state.moduleValue, path);
+			array.push(arrayTemplate(path, array));
+			renderModuleEditor();
+			setModuleDirty(true);
+		}
+
+		const removeArrayButton = event.target.closest("[data-array-remove]");
+		if (removeArrayButton) {
+			const path = JSON.parse(removeArrayButton.dataset.arrayRemove);
+			const array = getAtPath(state.moduleValue, path);
+			array.splice(Number(removeArrayButton.dataset.arrayIndex), 1);
+			renderModuleEditor();
+			setModuleDirty(true);
+		}
+
+		const moveArrayButton = event.target.closest("[data-array-move]");
+		if (moveArrayButton) {
+			const path = JSON.parse(moveArrayButton.dataset.arrayPath);
+			const array = getAtPath(state.moduleValue, path);
+			const index = Number(moveArrayButton.dataset.arrayIndex);
+			const targetIndex = moveArrayButton.dataset.arrayMove === "up" ? index - 1 : index + 1;
+			if (targetIndex >= 0 && targetIndex < array.length) {
+				[array[index], array[targetIndex]] = [array[targetIndex], array[index]];
+				renderModuleEditor();
+				setModuleDirty(true);
+			}
+		}
 	});
 
 	$("#menu-button").addEventListener("click", () => {
@@ -503,6 +880,8 @@ function bindEvents() {
 	$("#editor-back").addEventListener("click", () => showView("posts"));
 	$("#save-post").addEventListener("click", savePost);
 	$("#save-config").addEventListener("click", saveConfig);
+	$("#save-module").addEventListener("click", saveModule);
+	$("#config-module-search").addEventListener("input", renderModuleList);
 	$("#config-form").addEventListener("submit", (event) => event.preventDefault());
 
 	$("#view-editor").addEventListener("input", (event) => {
@@ -521,6 +900,22 @@ function bindEvents() {
 		setConfigDirty(true);
 	});
 
+	$("#config-editor-panel").addEventListener("input", (event) => {
+		const control = event.target.closest("[data-config-path]");
+		if (!control) return;
+		const path = JSON.parse(control.dataset.configPath);
+		let value = control.value;
+		if (control.type === "checkbox") value = control.checked;
+		else if (control.type === "number") {
+			if (!Number.isFinite(control.valueAsNumber)) return;
+			value = control.valueAsNumber;
+		} else if (control.dataset.configList) {
+			value = control.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+		}
+		setAtPath(state.moduleValue, path, value);
+		setModuleDirty(true);
+	});
+
 	$("#add-profile-link").addEventListener("click", () => {
 		const links = collectProfileLinks();
 		links.push({ name: "", icon: "material-symbols:link", url: "", showName: false });
@@ -535,10 +930,11 @@ function bindEvents() {
 		const current = $(".view.is-active")?.dataset.viewPanel;
 		if (current === "editor") savePost();
 		if (current === "settings") saveConfig();
+		if (current === "config-center") saveModule();
 	});
 
 	window.addEventListener("beforeunload", (event) => {
-		if (!state.postDirty && !state.configDirty) return;
+		if (!state.postDirty && !state.configDirty && !state.moduleDirty) return;
 		event.preventDefault();
 	});
 }
@@ -546,7 +942,7 @@ function bindEvents() {
 async function initialize() {
 	bindEvents();
 	try {
-		const [config] = await Promise.all([api("/api/config"), loadPosts()]);
+		const [config] = await Promise.all([api("/api/config"), loadPosts(), loadAllModules()]);
 		fillConfigForm(config);
 		const hour = new Date().getHours();
 		const greeting = hour < 11 ? "上午好" : hour < 18 ? "下午好" : "晚上好";
