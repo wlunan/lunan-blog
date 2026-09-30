@@ -41,12 +41,9 @@ export const backgroundWallpaper: BackgroundWallpaperConfig =
 			// 桌面背景图片（支持单张或多张随机）
 			// desktop: "assets/images/DesktopWallpaper/1500 x 1171zyep6v.webp",
 			desktop: [
-				"assets/images/DesktopWallpaper/1500 x 1171zyep6v.webp",
-				"assets/images/DesktopWallpaper/2500 x 1406gw9ol3-2.webp",
-				"assets/images/DesktopWallpaper/2880 x 1620gp6gp7.webp",
-				"assets/images/DesktopWallpaper/3840 x 21603q9qky.webp",
-				"assets/images/DesktopWallpaper/4046 x 2276jxjr85-3.webp",
-				"assets/images/DesktopWallpaper/4276 x 1966xe85j3-1.webp",
+				"assets/images/DesktopWallpaper/lunan-dawn-lake.webp",
+				"assets/images/DesktopWallpaper/lunan-dusk-town.webp",
+				"assets/images/DesktopWallpaper/lunan-starlight-lake.webp",
 			],
 			// 移动背景图片（支持单张或多张随机）
 			// mobile: "assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",

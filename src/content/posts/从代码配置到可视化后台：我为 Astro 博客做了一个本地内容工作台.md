@@ -1,16 +1,25 @@
 ---
-title: 从代码配置到可视化后台：我为 Astro 博客做了一个本地内容工作台
+title: "从代码配置到可视化后台：我为 Astro 博客做了一个本地内容工作台"
 published: 2026-09-29
-description: 不引入数据库和线上 CMS，用 Node.js、本地文件与配置覆盖层，为 Astro 静态博客增加文章编辑和完整配置管理能力。
+description: "不引入数据库和线上 CMS，用 Node.js、本地文件与配置覆盖层，为 Astro 静态博客增加文章编辑和完整配置管理能力。"
 tags:
-  - Astro
-  - Node.js
-  - 内容管理
-  - 前端工程
-category: 技术
-draft: true
+  - "Astro"
+  - "Node.js"
+  - "内容管理"
+  - "前端工程"
+category: "技术"
+draft: false
+image: ""
+lang: ""
+pinned: false
+author: ""
+sourceLink: ""
+licenseName: ""
+licenseUrl: ""
+comment: true
+password: ""
+passwordHint: ""
 ---
-
 # 从代码配置到可视化后台：我为 Astro 博客做了一个本地内容工作台
 
 静态博客最吸引我的地方，是它足够直接：文章是 Markdown，配置是 TypeScript，所有内容都跟着 Git 走，没有数据库，也没有需要长期维护的服务端。

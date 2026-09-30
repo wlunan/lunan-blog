@@ -1,13 +1,15 @@
 import { createServer } from "node:http";
 import { execFile } from "node:child_process";
-import { readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { build as buildBundle } from "esbuild";
 import matter from "gray-matter";
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POSTS_ROOT = path.join(PROJECT_ROOT, "src", "content", "posts");
+const TRASH_ROOT = path.join(PROJECT_ROOT, ".admin-trash", "posts");
 const CONFIG_PATH = path.join(PROJECT_ROOT, "src", "config", "adminConfig.json");
 const FOOTER_HTML_PATH = path.join(PROJECT_ROOT, "src", "config", "FooterConfig.html");
 const CONFIG_LOADER_PATH = path.join(PROJECT_ROOT, "scripts", "admin-config-loader.ts");
@@ -468,15 +470,36 @@ export function preparePostInput(body, fieldValue) {
 	};
 }
 
-function safePostPath(relativePath) {
+function safePostPath(relativePath, postsRoot = POSTS_ROOT) {
 	if (typeof relativePath !== "string" || !/\.(md|mdx)$/i.test(relativePath)) {
 		throw new RequestError("文章路径无效");
 	}
-	const resolved = path.resolve(POSTS_ROOT, relativePath);
-	if (!resolved.startsWith(`${POSTS_ROOT}${path.sep}`)) {
+	const resolvedRoot = path.resolve(postsRoot);
+	const resolved = path.resolve(resolvedRoot, relativePath);
+	if (!resolved.startsWith(`${resolvedRoot}${path.sep}`)) {
 		throw new RequestError("文章路径超出允许范围");
 	}
 	return resolved;
+}
+
+export async function movePostToTrash(
+	relativePath,
+	{ postsRoot = POSTS_ROOT, trashRoot = TRASH_ROOT, now = new Date() } = {},
+) {
+	const sourcePath = safePostPath(relativePath, postsRoot);
+	const sourceInfo = await stat(sourcePath);
+	if (!sourceInfo.isFile()) throw new RequestError("文章路径不是文件");
+
+	const normalizedPath = path.relative(path.resolve(postsRoot), sourcePath);
+	const timestamp = now.toISOString().replace(/[:.]/g, "-");
+	const targetPath = path.join(path.resolve(trashRoot), timestamp, normalizedPath);
+	await mkdir(path.dirname(targetPath), { recursive: true });
+	await rename(sourcePath, targetPath);
+
+	return {
+		targetPath,
+		trashEntry: path.relative(path.resolve(trashRoot), targetPath).replaceAll("\\", "/"),
+	};
 }
 
 function safeNewFileName(value) {
@@ -559,16 +582,37 @@ function sendJson(response, status, data) {
 	response.end(JSON.stringify(data));
 }
 
-async function sendFile(response, filePath) {
-	const content = await readFile(filePath);
+function sendContent(response, content, contentType) {
 	response.writeHead(200, {
 		"cache-control": "no-store",
-		"content-type": MIME_TYPES[path.extname(filePath)] ?? "application/octet-stream",
+		"content-type": contentType,
 		"content-security-policy":
-			"default-src 'self'; img-src 'self' data: https:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'",
+			"default-src 'self'; img-src 'self' data: https:; style-src 'self' 'nonce-lunan-admin-style'; script-src 'self'; connect-src 'self'; font-src 'self'",
 		"x-content-type-options": "nosniff",
 	});
 	response.end(content);
+}
+
+async function sendFile(response, filePath) {
+	const content = await readFile(filePath);
+	return sendContent(
+		response,
+		content,
+		MIME_TYPES[path.extname(filePath)] ?? "application/octet-stream",
+	);
+}
+
+async function sendAdminApp(response) {
+	const result = await buildBundle({
+		entryPoints: [path.join(UI_ROOT, "app.js")],
+		bundle: true,
+		format: "iife",
+		logLevel: "silent",
+		platform: "browser",
+		target: ["chrome100", "firefox100", "safari15"],
+		write: false,
+	});
+	return sendContent(response, result.outputFiles[0].contents, MIME_TYPES[".js"]);
 }
 
 async function handleRequest(request, response) {
@@ -582,7 +626,7 @@ async function handleRequest(request, response) {
 		return sendFile(response, path.join(UI_ROOT, "styles.css"));
 	}
 	if (request.method === "GET" && pathname === "/app.js") {
-		return sendFile(response, path.join(UI_ROOT, "app.js"));
+		return sendAdminApp(response);
 	}
 	if (request.method === "GET" && pathname === "/vendor/marked.min.js") {
 		return sendFile(response, path.join(PROJECT_ROOT, "public", "assets", "js", "marked.min.js"));
@@ -657,6 +701,14 @@ async function handleRequest(request, response) {
 		return sendJson(response, 200, {
 			ok: true,
 			post: await readPost(relativePath.replaceAll("\\", "/")),
+		});
+	}
+	if (request.method === "DELETE" && pathname === "/api/post") {
+		const relativePath = url.searchParams.get("path");
+		const { trashEntry } = await movePostToTrash(relativePath);
+		return sendJson(response, 200, {
+			ok: true,
+			trashPath: `.admin-trash/posts/${trashEntry}`,
 		});
 	}
 

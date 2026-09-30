@@ -109,6 +109,7 @@
 						<div class="editor-heading">
 							<button class="back-button" id="editor-back" type="button">← 返回文章列表</button>
 							<div class="editor-actions">
+								<button class="danger-button editor-delete is-hidden" id="delete-post" type="button">移入回收站</button>
 								<span class="save-state" id="post-save-state">尚未修改</span>
 								<button class="primary-button" id="save-post" type="button">保存文章</button>
 							</div>
@@ -131,10 +132,19 @@
 									<button type="button" data-insert="heading" title="二级标题">H2</button>
 									<button type="button" data-insert="link" title="链接">↗</button>
 									<button type="button" data-insert="quote" title="引用">“</button>
+									<button type="button" data-insert="bullet" title="无序列表">•</button>
+									<button type="button" data-insert="numbered" title="有序列表">1.</button>
+									<button type="button" data-insert="image" title="图片">▧</button>
 									<button type="button" data-insert="code" title="代码">&lt;/&gt;</button>
 								</div>
-								<div class="writing-pane is-active" data-editor-pane="write"><textarea id="post-body" spellcheck="true" placeholder="从这里开始写作…"></textarea></div>
-								<article class="preview-pane markdown-body" id="markdown-preview" data-editor-pane="preview"></article>
+								<div class="editor-panes">
+									<div class="writing-pane is-active" data-editor-pane="write"><div id="post-body-editor" aria-label="Markdown 正文编辑器"></div></div>
+									<div class="preview-pane" data-editor-pane="preview">
+										<div class="preview-heading"><b>实时预览</b><small id="preview-note">基于 Marked 的实时预览</small></div>
+										<article class="markdown-body" id="markdown-preview"></article>
+									</div>
+								</div>
+								<div class="editor-statusbar"><span id="editor-mode">Markdown</span><span id="editor-stats">0 字 · 1 行</span><span>Ctrl+S 保存 · Ctrl+F 查找 · Ctrl+H 替换</span></div>
 							</section>
 
 							<aside class="metadata-panel panel">

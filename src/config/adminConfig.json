@@ -2,7 +2,7 @@
 	"site": {
 		"title": "Lunan的博客",
 		"subtitle": "Lunan",
-		"siteUrl": "https://blog.vkfc.dpdns.org/",
+		"siteUrl": "https://blog.lunak.cn",
 		"description": "记录你所思",
 		"keywords": [
 			"Lunan",
@@ -61,7 +61,7 @@
 		"siteConfig": {
 			"title": "Lunan的博客",
 			"subtitle": "Lunan",
-			"site_url": "https://blog.vkfc.dpdns.org/",
+			"site_url": "https://blog.lunak.cn",
 			"description": "记录你所思",
 			"keywords": [
 				"Lunan",
@@ -213,6 +213,86 @@
 				]
 			},
 			"lang": "zh_CN"
+		},
+		"backgroundWallpaper": {
+			"mode": "banner",
+			"playerEnable": false,
+			"src": {
+				"desktop": [
+					"assets/images/DesktopWallpaper/lunan-dawn-lake.webp",
+					"assets/images/DesktopWallpaper/lunan-dusk-town.webp",
+					"assets/images/DesktopWallpaper/lunan-starlight-lake.webp"
+				],
+				"mobile": [
+					"assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
+					"assets/images/MobileWallpaper/1179 x 176683p5d2.webp",
+					"assets/images/MobileWallpaper/1179 x 1766mdr3wk.webp",
+					"assets/images/MobileWallpaper/1190 x 1683ex5m8w.webp",
+					"assets/images/MobileWallpaper/1276 x 17113q96l6.webp"
+				],
+				"playerUrl": "https://bed.twoleaf.cn/file/1785658612716_firefly.mp4"
+			},
+			"common": {
+				"dimOpacity": 0.2,
+				"playerMode": "random",
+				"homeText": {
+					"enable": true,
+					"title": "记录你所思",
+					"titleSize": "4.5rem",
+					"subtitle": [
+						"把想清楚的事，写下来",
+						"AI 是工具，思考才是主角",
+						"技术之外，也想聊聊生活",
+						"记录，是为了更好地思考",
+						"所思所感，皆可成文",
+						"慢慢写，也慢慢想"
+					],
+					"subtitleSize": "1.5rem",
+					"typewriter": {
+						"enable": true,
+						"speed": 100,
+						"deleteSpeed": 50,
+						"pauseTime": 2000
+					}
+				},
+				"postInfo": {
+					"mode": "description"
+				},
+				"navbar": {
+					"transparentMode": "semi",
+					"blur": 5
+				},
+				"waves": {
+					"enable": {
+						"desktop": false,
+						"mobile": false
+					}
+				},
+				"gradient": {
+					"enable": {
+						"desktop": true,
+						"mobile": true
+					},
+					"height": "10%"
+				},
+				"carousel": {
+					"enable": true,
+					"interval": 5000,
+					"transitionEffect": "zoom"
+				}
+			},
+			"banner": {
+				"position": "0% 20%"
+			},
+			"overlay": {
+				"zIndex": -1,
+				"opacity": 0.8,
+				"blur": 10,
+				"cardOpacity": 0.5
+			},
+			"fullscreen": {
+				"position": "center"
+			}
 		}
 	}
 }

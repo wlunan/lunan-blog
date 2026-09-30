@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# local admin recycle bin
+.admin-trash/
+
 # generated types
 .astro/
 

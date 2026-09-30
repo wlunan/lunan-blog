@@ -1,15 +1,59 @@
 import assert from "node:assert/strict";
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import test from "node:test";
 import matter from "gray-matter";
 import {
+	getArrayItemMeta,
+	getEnumOptions,
+	getFieldMeta,
+	normalizeConfigPath,
+} from "./admin-ui/config-metadata.js";
+import {
 	createAdminServer,
 	listenAdminServer,
+	movePostToTrash,
 	patchFrontmatter,
 	preparePostInput,
 	validateConfig,
 } from "./admin-server.mjs";
+
+test("完整配置元数据将嵌套字段和导航项目转换为可读内容", () => {
+	assert.equal(
+		normalizeConfigPath("navBarConfig", ["links", 0, "children", 1, "pageKey"]),
+		"navBarConfig.links[].children[].pageKey",
+	);
+	assert.deepEqual(getFieldMeta("navBarConfig", ["links", 0, "icon"], "icon"), {
+		label: "图标代码",
+		description: "Iconify 图标标识，格式通常为“图标集:图标名”。",
+		technicalPath: "navBarConfig.links[].icon",
+		unit: "",
+	});
+	assert.deepEqual(
+		getArrayItemMeta(
+			"navBarConfig",
+			["links"],
+			{ name: "文章", url: "#", children: [{ name: "归档" }, { name: "分类" }] },
+			0,
+		),
+		{ title: "文章", detail: "2 个子菜单 · #" },
+	);
+	assert.deepEqual(getEnumOptions("navBarSearchConfig", ["method"]), [
+		[0, "Pagefind（站内静态搜索）"],
+	]);
+	assert.ok(
+		getEnumOptions("sidebarLayoutConfig", ["rightComponents", 0, "type"]).some(
+			([value, label]) => value === "advertisement" && label === "广告",
+		),
+	);
+	assert.ok(
+		getEnumOptions("live2dWidgetConfig", ["menus", "items", 0, "action"]).some(
+			([value, label]) => value === "switchModel" && label === "切换模型",
+		),
+	);
+});
 
 function listen(server, port = 0) {
 	return new Promise((resolve, reject) => {
@@ -114,6 +158,31 @@ test("preparePostInput 保持不带 Frontmatter 的正文和右侧字段", () =>
 	assert.equal(prepared.body, "# 普通正文\n");
 	assert.equal(prepared.fields.title, "右侧表单标题");
 	assert.deepEqual(prepared.fields.tags, ["右侧标签"]);
+});
+
+test("movePostToTrash 将文章移入可恢复目录并拒绝越界路径", async (context) => {
+	const projectRoot = await mkdtemp(path.join(tmpdir(), "firefly-admin-trash-"));
+	const postsRoot = path.join(projectRoot, "posts");
+	const trashRoot = path.join(projectRoot, ".admin-trash", "posts");
+	const sourcePath = path.join(postsRoot, "guide", "demo.md");
+	context.after(() => rm(projectRoot, { recursive: true, force: true }));
+
+	await mkdir(path.dirname(sourcePath), { recursive: true });
+	await writeFile(sourcePath, "# 可恢复文章\n", "utf8");
+
+	const result = await movePostToTrash("guide/demo.md", {
+		postsRoot,
+		trashRoot,
+		now: new Date("2026-09-29T09:08:07.006Z"),
+	});
+
+	await assert.rejects(access(sourcePath), (error) => error.code === "ENOENT");
+	assert.equal(await readFile(result.targetPath, "utf8"), "# 可恢复文章\n");
+	assert.equal(result.trashEntry, "2026-09-29T09-08-07-006Z/guide/demo.md");
+	await assert.rejects(
+		movePostToTrash("../outside.md", { postsRoot, trashRoot }),
+		/文章路径超出允许范围/,
+	);
 });
 
 test("validateConfig 接受仓库中的受管配置", async () => {
