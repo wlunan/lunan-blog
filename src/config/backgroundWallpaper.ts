@@ -48,11 +48,9 @@ export const backgroundWallpaper: BackgroundWallpaperConfig =
 			// 移动背景图片（支持单张或多张随机）
 			// mobile: "assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
 			mobile: [
-				"assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
-				"assets/images/MobileWallpaper/1179 x 176683p5d2.webp",
-				"assets/images/MobileWallpaper/1179 x 1766mdr3wk.webp",
-				"assets/images/MobileWallpaper/1190 x 1683ex5m8w.webp",
-				"assets/images/MobileWallpaper/1276 x 17113q96l6.webp",
+				"assets/images/MobileWallpaper/lunan-dawn-lake-mobile.webp",
+				"assets/images/MobileWallpaper/lunan-dusk-town-mobile.webp",
+				"assets/images/MobileWallpaper/lunan-starlight-lake-mobile.webp",
 			],
 			// 背景视频播放地址
 			// 支持单个视频路径（字符串）或多个视频循环（数组，参考上面壁纸配置）

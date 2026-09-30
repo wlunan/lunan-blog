@@ -17,7 +17,7 @@
 	"profile": {
 		"avatar": "assets/images/avatar.jpg",
 		"name": "Lunan",
-		"bio": "",
+		"bio": "记录技术实践、AI 思考与生活观察",
 		"links": [
 			{
 				"name": "GitHub",
@@ -28,7 +28,7 @@
 			{
 				"name": "Email",
 				"icon": "fa7-solid:envelope",
-				"url": "ihshao@outlook.com",
+				"url": "mailto:ihshao@outlook.com",
 				"showName": false
 			}
 		]
@@ -224,11 +224,9 @@
 					"assets/images/DesktopWallpaper/lunan-starlight-lake.webp"
 				],
 				"mobile": [
-					"assets/images/MobileWallpaper/1080 x 14391pyzm9.webp",
-					"assets/images/MobileWallpaper/1179 x 176683p5d2.webp",
-					"assets/images/MobileWallpaper/1179 x 1766mdr3wk.webp",
-					"assets/images/MobileWallpaper/1190 x 1683ex5m8w.webp",
-					"assets/images/MobileWallpaper/1276 x 17113q96l6.webp"
+					"assets/images/MobileWallpaper/lunan-dawn-lake-mobile.webp",
+					"assets/images/MobileWallpaper/lunan-dusk-town-mobile.webp",
+					"assets/images/MobileWallpaper/lunan-starlight-lake-mobile.webp"
 				],
 				"playerUrl": "https://bed.twoleaf.cn/file/1785658612716_firefly.mp4"
 			},

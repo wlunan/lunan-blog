@@ -1,29 +1,24 @@
-# 关于我 / About Me
+# 关于我
 
-你好！我是 **Lunan** ，一个热爱运动的技术爱好者。
+你好，我是 **Lunan**。
 
-## 🛠️ 关于本站
+我是一名热爱技术与运动的技术爱好者。这个博客用来记录我在软件开发、AI 工具和个人效率方面的实践，也会写下生活中的观察与思考。
 
-这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 模板，Firefly 是基于 [Fuwari](https://github.com/saicaca/fuwari) 的二次开发。
+## 我在这里写什么
 
-**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
+- **技术实践**：Astro、前端工程、开发工具和真实项目中的问题与解决过程；
+- **AI 与思考**：如何使用 AI，也关注工具之外的判断与方法；
+- **生活记录**：运动、阅读，以及日常经验带来的启发。
 
+我希望这里的内容不只给出结果，也尽量说明为什么这样做、遇到了什么问题，以及方案的边界。
 
-**🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
+## 联系我
 
-**🏠我的博客： [https://blog.vkfc.dpdns.org/](https://blog.vkfc.dpdns.org/)**
+- [GitHub](https://github.com/wlunan)
+- [Email](mailto:ihshao@outlook.com)
 
-**📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
+## 关于本站
 
-**⭐Firefly开源地址：[https://github.com/CuteLeaf/Firefly](https://github.com/CuteLeaf/Firefly)** 
+本站基于 [Astro](https://astro.build/) 构建，使用 [Firefly](https://github.com/CuteLeaf/Firefly) 主题，并在此基础上进行了个性化配置和功能扩展。
 
-**⭐Fuwari开源地址：[https://github.com/saicaca/fuwari](https://github.com/saicaca/fuwari)**
-
-::github{repo="CuteLeaf/Firefly"}
-
-::github{repo="saicaca/fuwari"}
-
----
-
-*感谢你的来访！希望在这里能找到对你有用的内容！*
-
+感谢你的来访。希望这里有一些内容，能对你有所帮助。
