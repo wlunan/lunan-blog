@@ -1,9 +1,10 @@
 ---
 title: 修改Codex默认路径
 published: 2026-08-31
-description: 得修改一下，不然C盘不够用了
+description: 介绍在 Windows 上通过 CODEX_HOME 迁移 Codex 数据目录的步骤、验证方法和回退注意事项。
 tags:
-  - 默认
+  - Codex
+  - Windows
   - 教程
 category: 教程
 draft: false

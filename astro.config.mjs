@@ -234,7 +234,7 @@ export default defineConfig({
 				// 根据页面开关配置过滤sitemap
 				const url = new URL(page);
 				const pathname = url.pathname;
-				if (pathname === "/dynamic/" && !siteConfig.pages.dynamic) {
+				if (pathname.startsWith("/dynamic/") && !siteConfig.pages.dynamic) {
 					return false;
 				}
 				if (pathname === "/friends/" && !siteConfig.pages.friends) {
@@ -252,7 +252,7 @@ export default defineConfig({
 				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
 					return false;
 				}
-				if (pathname === "/gallery/" && !siteConfig.pages.gallery) {
+				if (pathname.startsWith("/gallery/") && !siteConfig.pages.gallery) {
 					return false;
 				}
 				if (pathname === "/anime/" && !siteConfig.pages.anime) {

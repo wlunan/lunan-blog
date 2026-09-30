@@ -9,6 +9,7 @@ import FontSetup from "@components/features/FontSetup.astro";
 import MusicManager from "@components/features/MusicManager.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
 import ConfigCarrier from "@components/layout/ConfigCarrier.astro";
+import defaultOgImage from "@/assets/images/DesktopWallpaper/lunan-dawn-lake.webp";
 
 import {
 	analyticsConfig,
@@ -90,6 +91,12 @@ if (siteConfig.post.generateOgImages && postSlug) {
 	ogImageUrl = new URL(`/og/${postSlug}.png`, Astro.site).toString();
 }
 
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const socialDescription = description || siteConfig.description || pageTitle;
+const socialImageUrl =
+	ogImageUrl ?? new URL(defaultOgImage.src, Astro.site).toString();
+const socialImageAlt = `${siteConfig.title}：${siteConfig.description}`;
+
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
 
@@ -146,9 +153,10 @@ const siteLang = lang.replace("_", "-");
     )}
 
     <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
     <meta
       name="description"
-      content={description || siteConfig.description || pageTitle}
+      content={socialDescription}
     />
     {
       siteConfig.keywords && siteConfig.keywords.length > 0 && (
@@ -158,13 +166,12 @@ const siteLang = lang.replace("_", "-");
     <meta name="author" content={profileConfig.name} />
 
     <meta property="og:site_name" content={siteConfig.title} />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:locale" content={siteLang.replace("-", "_")} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={pageTitle} />
-    <meta
-      property="og:description"
-      content={description || siteConfig.description || pageTitle}
-    />
-    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta property="og:description" content={socialDescription} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:alt" content={socialImageAlt} />
     {
       setOGTypeArticle ? (
         <meta property="og:type" content="article" />
@@ -174,14 +181,13 @@ const siteLang = lang.replace("_", "-");
     }
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
+    <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={pageTitle} />
-    <meta
-      name="twitter:description"
-      content={description || siteConfig.description || pageTitle}
-    />
+    <meta name="twitter:description" content={socialDescription} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
 
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     {
       favicons.map((favicon) => (

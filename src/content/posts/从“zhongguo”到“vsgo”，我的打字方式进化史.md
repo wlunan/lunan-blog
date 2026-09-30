@@ -1,9 +1,10 @@
 ---
 title: 从“zhongguo”到“vsgo”，我的打字方式进化史
 published: 2026-06-25
-description: ""
+description: "从二指禅、全拼盲打到小鹤双拼，记录个人中文输入方式的变化，以及效率习惯如何被重新训练。"
 image: ./assets/润色发布-从“zhongguo”到“vsgo”，我的打字方式进化史-1782382538797.webp
-tags: []
+tags: [输入法, 双拼, 效率工具, 个人体验]
+category: 效率
 draft: false
 date: 2026-08-08T15:46:25+08:00
 lastmod: 2026-08-08T21:12:00+08:00

@@ -1,10 +1,13 @@
 ---
 title: LeetCode Hot 100 题解（简单 + 中等版）
 published: 2026-08-26
-description: 题解
+description: 汇总 LeetCode Hot 100 中 88 道简单与中等题，包含解题思路、复杂度分析以及 Java、Python 实现。
 tags:
-  - 默认
-category:
+  - LeetCode
+  - 算法
+  - Java
+  - Python
+category: 算法
 draft: false
 date: 2026-08-07T17:15:09+08:00
 lastmod: 2026-08-31T15:09:13+08:00

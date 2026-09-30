@@ -1,9 +1,11 @@
 ---
 title: 记录使用自己账户开日区 ChatGPT Plus
 published: 2026-08-31
-description: 除了贵，确实好用多了
+description: 记录通过国内银行卡和日区 Google Play 订阅 ChatGPT Plus 的实际流程、注意事项与费用参考。
 tags:
-  - 默认
+  - ChatGPT
+  - Google Play
+  - 订阅
   - 教程
 category: 教程
 draft: false

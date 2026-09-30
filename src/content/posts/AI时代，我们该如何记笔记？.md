@@ -1,16 +1,15 @@
 ---
 title: AI时代，我们该如何记笔记？
 published: 2026-04-11
-description: ""
+description: "分享“80% 说、20% 改”的语音加 AI 笔记工作流，让零散表达更快变成可用文档。"
 image: ./assets/AI时代，我们该如何记笔记？_20260514152151.png
-tags: []
+tags: [AI, 笔记方法, 语音输入, 效率]
+category: AI
 draft: false
 date: 2026-08-08T15:46:25+08:00
 lastmod: 2026-08-08T21:13:51+08:00
 ---
 ![doubao_image_9](./assets/AI时代，我们该如何记笔记？_20260514152151.png)
-
-## AI时代，我们该如何记笔记？
 
 ### 引言：从“记录”到“可用”的鸿沟
 

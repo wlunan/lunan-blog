@@ -1,8 +1,9 @@
 ---
 title: 几千年前，人类就在写Prompt了
 published: 2026-08-06
-description: ""
+description: "从奏折、书信和修辞回看提示词工程：好 Prompt 的本质，是清晰表达背景、目标与约束。"
 tags: [AI, Prompt, 科普, 语言]
+category: AI
 draft: false
 date: 2026-08-08T15:46:25+08:00
 lastmod: 2026-08-08T21:11:23+08:00

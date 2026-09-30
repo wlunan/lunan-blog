@@ -3,11 +3,13 @@
 		"title": "Lunan的博客",
 		"subtitle": "Lunan",
 		"siteUrl": "https://blog.lunak.cn",
-		"description": "记录你所思",
+		"description": "记录软件开发、AI 工具、效率方法与生活思考的个人技术博客。",
 		"keywords": [
 			"Lunan",
 			"lunan",
 			"Astro",
+			"AI 工具",
+			"开发效率",
 			"博客",
 			"技术博客",
 			"静态博客"
@@ -50,11 +52,11 @@
 	"pages": {
 		"friends": true,
 		"sponsor": false,
-		"guestbook": true,
+		"guestbook": false,
 		"bangumi": false,
-		"gallery": true,
+		"gallery": false,
 		"anime": false,
-		"dynamic": true,
+		"dynamic": false,
 		"booknav": true
 	},
 	"overrides": {
@@ -62,11 +64,13 @@
 			"title": "Lunan的博客",
 			"subtitle": "Lunan",
 			"site_url": "https://blog.lunak.cn",
-			"description": "记录你所思",
+			"description": "记录软件开发、AI 工具、效率方法与生活思考的个人技术博客。",
 			"keywords": [
 				"Lunan",
 				"lunan",
 				"Astro",
+				"AI 工具",
+				"开发效率",
 				"博客",
 				"技术博客",
 				"静态博客"
@@ -140,11 +144,11 @@
 			"pages": {
 				"friends": true,
 				"sponsor": false,
-				"guestbook": true,
+				"guestbook": false,
 				"bangumi": false,
-				"gallery": true,
+				"gallery": false,
 				"anime": false,
-				"dynamic": true,
+				"dynamic": false,
 				"booknav": true
 			},
 			"categoryBar": true,
@@ -268,8 +272,8 @@
 				},
 				"gradient": {
 					"enable": {
-						"desktop": true,
-						"mobile": true
+						"desktop": false,
+						"mobile": false
 					},
 					"height": "10%"
 				},

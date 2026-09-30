@@ -18,6 +18,7 @@ import { Icon } from "astro-icon/components";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import CoverImage from "@/components/common/CoverImage.astro";
+import defaultOgImage from "@/assets/images/DesktopWallpaper/lunan-dawn-lake.webp";
 import PostMetadata from "@/components/layout/PostMeta.astro";
 import RecommendedPost from "@/components/misc/RecommendedPost.astro";
 import SharePoster from "@/components/misc/SharePoster.svelte";
@@ -86,22 +87,41 @@ const posterAvatarSelector = profileConfig.avatar
 
 dayjs.extend(utc);
 
+const canonicalPostUrl = new URL(getPostUrlBySlug(entry.id), Astro.site).toString();
+const structuredImageUrl = new URL(
+	getDirectImageUrl(processedImage) ?? defaultOgImage.src,
+	Astro.site,
+).toString();
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
+	"@id": `${canonicalPostUrl}#article`,
 	headline: entry.data.title,
 	description: entry.data.description || entry.data.title,
-	keywords: entry.data.tags,
+	url: canonicalPostUrl,
+	mainEntityOfPage: {
+		"@type": "WebPage",
+		"@id": canonicalPostUrl,
+	},
+	image: [structuredImageUrl],
+	keywords: entry.data.tags.join(", "),
+	articleSection: entry.data.category || undefined,
 	author: {
 		"@type": "Person",
 		name: profileConfig.name,
 		url: Astro.site,
 	},
-	datePublished: formatDateToYYYYMMDD(entry.data.published),
+	publisher: {
+		"@type": "Person",
+		name: profileConfig.name,
+		url: Astro.site,
+	},
+	datePublished: entry.data.published.toISOString(),
+	dateModified: (entry.data.updated ?? entry.data.published).toISOString(),
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
 };
 
 const relatedPosts = await getRelatedPosts(entry, 5);
