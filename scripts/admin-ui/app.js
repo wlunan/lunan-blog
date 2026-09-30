@@ -239,8 +239,9 @@ async function loadPosts() {
 
 function autoSizeTitle() {
 	const title = $("#post-title");
+	const minimumHeight = window.matchMedia("(min-width: 1280px)").matches ? 36 : 48;
 	title.style.height = "auto";
-	title.style.height = `${Math.max(title.scrollHeight, 48)}px`;
+	title.style.height = `${Math.max(title.scrollHeight, minimumHeight)}px`;
 }
 
 let previewTimer;
@@ -990,6 +991,7 @@ function bindEvents() {
 		$("#sidebar-backdrop").classList.add("is-visible");
 	});
 	$("#sidebar-backdrop").addEventListener("click", closeSidebar);
+	window.addEventListener("resize", autoSizeTitle);
 	$("#post-search").addEventListener("input", renderPostList);
 	$("#editor-back").addEventListener("click", () => showView("posts"));
 	$("#save-post").addEventListener("click", savePost);
