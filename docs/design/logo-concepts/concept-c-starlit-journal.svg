@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">湖上星笺</title>
+  <desc id="desc">打开的书页、远山与星光组成的 Lunan 博客图标</desc>
+  <defs>
+    <linearGradient id="bg" x1="74" y1="48" x2="434" y2="465" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#355C78"/>
+      <stop offset="1" stop-color="#172A42"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="124" fill="url(#bg)"/>
+  <path d="M92 219c59-20 111-10 164 31 53-41 105-51 164-31v168c-62-15-116 2-164 47-48-45-102-62-164-47V219Z" fill="#F7F2E8"/>
+  <path d="M256 251v183" stroke="#C6D7DF" stroke-width="13" stroke-linecap="round"/>
+  <path d="M121 344c45-12 87 1 135 40 48-39 90-52 135-40" fill="none" stroke="#7EA9BD" stroke-width="15" stroke-linecap="round"/>
+  <path d="M143 316c37-61 74-88 113-88 39 0 76 27 113 88-40-24-77-32-113-21-36-11-73-3-113 21Z" fill="#28485F"/>
+  <path d="M256 82c5 21 19 35 40 40-21 5-35 19-40 40-5-21-19-35-40-40 21-5 35-19 40-40Z" fill="#FFC857"/>
+  <circle cx="169" cy="139" r="8" fill="#CBE4EF"/>
+  <circle cx="348" cy="167" r="7" fill="#CBE4EF"/>
+</svg>

@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Lunan 博客图标三套候选方案</title>
+  <desc id="desc">月泊萤光、萤火署名和湖上星笺三套图标的大图与小尺寸对比</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#18324A" flood-opacity=".12"/>
+    </filter>
+    <linearGradient id="a-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1D4965"/>
+      <stop offset="1" stop-color="#10283D"/>
+    </linearGradient>
+    <radialGradient id="a-glow" cx="0" cy="0" r="1" gradientTransform="translate(358 158) scale(54)">
+      <stop stop-color="#FFD675" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#FFD675" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="b-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8F3E9"/>
+      <stop offset="1" stop-color="#E4EEF4"/>
+    </linearGradient>
+    <linearGradient id="b-ink" x1="138" y1="108" x2="390" y2="402" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#244F69"/>
+      <stop offset="1" stop-color="#10283D"/>
+    </linearGradient>
+    <linearGradient id="c-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#355C78"/>
+      <stop offset="1" stop-color="#172A42"/>
+    </linearGradient>
+    <g id="icon-a">
+      <rect width="512" height="512" rx="124" fill="url(#a-bg)"/>
+      <circle cx="358" cy="158" r="54" fill="url(#a-glow)"/>
+      <path d="M278 103c-69 13-121 73-121 146 0 82 66 148 148 148 34 0 65-11 90-30-24 37-66 62-114 62-75 0-136-61-136-136 0-70 53-127 121-135 2-20 6-38 12-55Z" fill="#F7F2E8"/>
+      <path d="M151 347c47-18 91-19 133-3 36 14 76 15 119-3" fill="none" stroke="#A8D1E5" stroke-width="20" stroke-linecap="round"/>
+      <path d="M178 397c42-10 79-9 113 3 29 11 61 11 96 0" fill="none" stroke="#6CA6C2" stroke-width="13" stroke-linecap="round" opacity=".82"/>
+      <path d="M358 128c4 15 14 25 29 29-15 4-25 14-29 29-4-15-14-25-29-29 15-4 25-14 29-29Z" fill="#FFC857"/>
+    </g>
+    <g id="icon-b">
+      <rect width="512" height="512" rx="124" fill="url(#b-bg)"/>
+      <path d="M170 121v193c0 45 22 71 67 71h139" fill="none" stroke="url(#b-ink)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M212 118c58-49 137-24 154 34 9 32-7 63-42 74" fill="none" stroke="#E3A634" stroke-width="13" stroke-linecap="round" stroke-dasharray="2 28"/>
+      <circle cx="324" cy="226" r="16" fill="#FFC857"/>
+      <path d="M313 214c-18-17-35-8-32 11 3 17 20 22 39 10M335 214c18-17 35-8 32 11-3 17-20 22-39 10" fill="#FFF5CD"/>
+      <path d="M324 211v31" stroke="#8B641B" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <g id="icon-c">
+      <rect width="512" height="512" rx="124" fill="url(#c-bg)"/>
+      <path d="M92 219c59-20 111-10 164 31 53-41 105-51 164-31v168c-62-15-116 2-164 47-48-45-102-62-164-47V219Z" fill="#F7F2E8"/>
+      <path d="M256 251v183" stroke="#C6D7DF" stroke-width="13" stroke-linecap="round"/>
+      <path d="M121 344c45-12 87 1 135 40 48-39 90-52 135-40" fill="none" stroke="#7EA9BD" stroke-width="15" stroke-linecap="round"/>
+      <path d="M143 316c37-61 74-88 113-88 39 0 76 27 113 88-40-24-77-32-113-21-36-11-73-3-113 21Z" fill="#28485F"/>
+      <path d="M256 82c5 21 19 35 40 40-21 5-35 19-40 40-5-21-19-35-40-40 21-5 35-19 40-40Z" fill="#FFC857"/>
+      <circle cx="169" cy="139" r="8" fill="#CBE4EF"/>
+      <circle cx="348" cy="167" r="7" fill="#CBE4EF"/>
+    </g>
+  </defs>
+
+  <rect width="1600" height="900" fill="#EEF3F6"/>
+  <text x="80" y="67" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="31" font-weight="700" fill="#10283D">Lunan 博客 · 图标方向对比</text>
+  <text x="1520" y="64" text-anchor="end" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" fill="#668093">大图气质 + 浏览器标签小尺寸辨识度</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="100" width="460" height="730" rx="34" fill="#FFFFFF"/>
+    <rect x="570" y="100" width="460" height="730" rx="34" fill="#FFFFFF"/>
+    <rect x="1070" y="100" width="460" height="730" rx="34" fill="#FFFFFF"/>
+  </g>
+
+  <g transform="translate(150 150) scale(.586)"><use href="#icon-a"/></g>
+  <g transform="translate(650 150) scale(.586)"><use href="#icon-b"/></g>
+  <g transform="translate(1150 150) scale(.586)"><use href="#icon-c"/></g>
+
+  <g font-family="Segoe UI, Microsoft YaHei, sans-serif">
+    <text x="300" y="500" text-anchor="middle" font-size="24" font-weight="700" fill="#10283D">A · 月泊萤光</text>
+    <text x="300" y="535" text-anchor="middle" font-size="16" fill="#668093">月牙 × 湖面 × 灵感光点</text>
+    <text x="300" y="574" text-anchor="middle" font-size="15" fill="#35546A">安静、自然、与现有壁纸最统一</text>
+
+    <text x="800" y="500" text-anchor="middle" font-size="24" font-weight="700" fill="#10283D">B · 萤火署名</text>
+    <text x="800" y="535" text-anchor="middle" font-size="16" fill="#668093">L 字签名 × 萤火轨迹</text>
+    <text x="800" y="574" text-anchor="middle" font-size="15" fill="#35546A">个人化、轻快、延续原有字母识别</text>
+
+    <text x="1300" y="500" text-anchor="middle" font-size="24" font-weight="700" fill="#10283D">C · 湖上星笺</text>
+    <text x="1300" y="535" text-anchor="middle" font-size="16" fill="#668093">书页 × 山湖 × 星光</text>
+    <text x="1300" y="574" text-anchor="middle" font-size="15" fill="#35546A">内容属性明确，画面叙事更丰富</text>
+  </g>
+
+  <g transform="translate(112 620)">
+    <rect width="376" height="92" rx="18" fill="#F4F7F9" stroke="#DBE5EA"/>
+    <g transform="translate(20 18) scale(.109375)"><use href="#icon-a"/></g>
+    <text x="95" y="40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#233E52">Lunan 的博客</text>
+    <text x="95" y="64" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="13" fill="#728897">32px 浏览器标签预览</text>
+  </g>
+  <g transform="translate(612 620)">
+    <rect width="376" height="92" rx="18" fill="#F4F7F9" stroke="#DBE5EA"/>
+    <g transform="translate(20 18) scale(.109375)"><use href="#icon-b"/></g>
+    <text x="95" y="40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#233E52">Lunan 的博客</text>
+    <text x="95" y="64" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="13" fill="#728897">32px 浏览器标签预览</text>
+  </g>
+  <g transform="translate(1112 620)">
+    <rect width="376" height="92" rx="18" fill="#F4F7F9" stroke="#DBE5EA"/>
+    <g transform="translate(20 18) scale(.109375)"><use href="#icon-c"/></g>
+    <text x="95" y="40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#233E52">Lunan 的博客</text>
+    <text x="95" y="64" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="13" fill="#728897">32px 浏览器标签预览</text>
+  </g>
+
+  <g font-family="Segoe UI, Microsoft YaHei, sans-serif">
+    <rect x="125" y="753" width="350" height="46" rx="23" fill="#E5F0F5"/>
+    <text x="300" y="782" text-anchor="middle" font-size="15" font-weight="600" fill="#244F69">推荐：最符合现有湖景与夜色品牌</text>
+    <rect x="625" y="753" width="350" height="46" rx="23" fill="#FAF1D8"/>
+    <text x="800" y="782" text-anchor="middle" font-size="15" font-weight="600" fill="#805A0E">延续型：从当前 L 图标自然升级</text>
+    <rect x="1125" y="753" width="350" height="46" rx="23" fill="#EAF0F4"/>
+    <text x="1300" y="782" text-anchor="middle" font-size="15" font-weight="600" fill="#35546A">内容型：一眼看出是写作博客</text>
+  </g>
+</svg>
