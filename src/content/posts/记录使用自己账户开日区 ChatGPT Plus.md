@@ -13,7 +13,7 @@ date: 2026-08-07T17:15:09+08:00
 lastmod: 2026-08-31T15:37:14+08:00
 author: lunan
 ---
-![147](https://s3.vkfc.dpdns.org/obs-notes/2026/08/8d1cdb1b87a5ccd6.jpg)
+![147](https://s3.lunak.cn/obs-notes/2026/08/8d1cdb1b87a5ccd6.jpg)
 如果不想通过代购，又想使用自己的账号开通 ChatGPT Plus，可以尝试通过**国内 Visa/Mastercard + 日区 Google Play**完成订阅。
 
 我自己实际使用的是**工商银行宇宙星座 Visa 信用卡**，通过日区 Google Play 订阅 ChatGPT Plus。除此之外，也可以尝试招商银行 Mastercard 等支持境外支付的银行卡。

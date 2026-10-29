@@ -66,7 +66,7 @@ codex doctor
 ```
 
 输出中的 `CODEX_HOME`、`sqlite home` 或 `daemon state dir` 应指向新的 E 盘目录。
-![修改Codex默认路径_20260831145246](https://s3.vkfc.dpdns.org/obs-notes/2026/08/f2780d16f710eec2.png)
+![修改Codex默认路径_20260831145246](https://s3.lunak.cn/obs-notes/2026/08/f2780d16f710eec2.png)
 再新建一条测试对话，并检查：
 
 ```powershell

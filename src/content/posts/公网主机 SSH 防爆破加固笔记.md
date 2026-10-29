@@ -1,11 +1,13 @@
 ---
-title: "公网主机 SSH 防爆破加固笔记"
+title: 公网主机 SSH 防爆破加固笔记
 published: 2026-10-02
 updated: 2026-10-02
 description: "从关闭密码认证、改用密钥登录，到 fail2ban 与防火墙兜底，记录一次完整的 SSH 公网加固流程、配置生效顺序和常见坑。"
 tags: [SSH, 安全加固, Linux, 服务器]
 category: "教程"
 draft: false
+date: 2026-10-02T15:35:57+08:00
+lastmod: 2026-10-03T09:38:53+08:00
 ---
 
 > 适用场景：家里/学校的迷你主机、VPS、云服务器等**有公网 IP 且开放 22 端口**的 Linux 机器。
